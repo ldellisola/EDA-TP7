@@ -1,6 +1,7 @@
 #pragma once
 #include "../Controllers\Controller.h"
 #include "Ev_t.h"
+#include "../Stage.h"
 #include <vector>
 #include <list>
 
@@ -15,10 +16,12 @@ public:
 	void getEvent();
 	bool areThereActiveEvents();
 	Ev_t * returnEvent(int * size);
-	void HandleEventDispatch();
-private:
-	void displatchEvent(Ev_t& ev);
-	vector<Controller *> controllers;
+	void HandleEventDispatch(Stage& stage);
+	void removeEvent(list<Ev_t>::iterator it);
 	list<Ev_t> events;
+private:
+	void displatchEvent(Ev_t& ev,Stage& stage);
+	vector<Controller *> controllers;
+	
 };
 

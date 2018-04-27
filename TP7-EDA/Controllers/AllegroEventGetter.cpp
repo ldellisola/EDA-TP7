@@ -34,6 +34,8 @@ AllegroEventGetter::AllegroEventGetter( ALLEGRO_EVENT_QUEUE * eq_)
 
 void * AllegroEventGetter::getEvent(void * data)
 {
+	ev[0].deactivate();
+	ev[1].deactivate();
 
 	ALLEGRO_EVENT alEv;
 
@@ -49,7 +51,7 @@ void * AllegroEventGetter::getEvent(void * data)
 				ev[1].Event = QUIT_EV;
 			else
 				if (!ev[0].active && validKey(alEv.keyboard.keycode) && !ev[0].timerExist())
-					ev[0] = setEvent(trasformAllegroEvents(alEv.keyboard.keycode), WORMID);
+					setEvent(trasformAllegroEvents(alEv.keyboard.keycode), WORMID);
 			break;
 		case ALLEGRO_EVENT_KEY_UP:
 			if (ev[0].timerExist() && ev[0].Event == trasformAllegroEvents(alEv.keyboard.keycode)) {

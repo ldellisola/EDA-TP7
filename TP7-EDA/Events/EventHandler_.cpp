@@ -156,11 +156,11 @@ void EventHandler::dispatchEvent(Evnt ev, Stage& stage, int wormID = 0)
 {
 	switch (ev)
 	{
-	case LEFT_EV: if (stage.worms[wormID].state == STILL) stage.worms[wormID].move(LEFT); break;
-	case RIGHT_EV:if (stage.worms[wormID].state == STILL)stage.worms[wormID].move(RIGHT); break;
-	case JUMP_EV:if (stage.worms[wormID].state == STILL)stage.worms[wormID].jump(); break;
-	case FLIP_LEFT_EV: if (stage.worms[wormID].state == STILL) stage.worms[wormID].flipLeft(); break;
-	case FLIP_RIGHT_EV: if (stage.worms[wormID].state == STILL) stage.worms[wormID].flipRight(); break;
+	case LEFT_EV: if (stage.worms[wormID].state == STILL_ST) stage.worms[wormID].move(LEFT_DR); break;
+	case RIGHT_EV:if (stage.worms[wormID].state == STILL_ST)stage.worms[wormID].move(RIGHT_DR); break;
+	case JUMP_EV:if (stage.worms[wormID].state == STILL_ST)stage.worms[wormID].jump(); break;
+	case FLIP_LEFT_EV: if (stage.worms[wormID].state == STILL_ST) stage.worms[wormID].flipLeft(); break;
+	case FLIP_RIGHT_EV: if (stage.worms[wormID].state == STILL_ST) stage.worms[wormID].flipRight(); break;
 	case TIMER_EV:
 		stage.draw();
 		for (Worm& worm : stage.worms)

@@ -1,33 +1,50 @@
 
 #include "AllegroClass.h"
 #include "Events\EventHandler.h"
+#include "Stage.h"
 #include "Controllers\AllegroEventGetter.h"
 #include "Observers\drawStage.h"
 
 
-#define WALKFILE ""
-#define JUMPFILE ""
-#define WALKSIZE (2)
-#define JUMPSIZE (2)
-#define BACKGROUNDFILE ""
+
+
+
 int main(int argc ,char * argv[]) {
 
 	AllegroClass allegro(2000, 1000, 50);
-	AllegroEventGetter allegroEvents(allegro.getEventQueue());
 	EventHandler eventHandler;
-	// Falta network controller
-	DrawStage drawStage(JUMPFILE, JUMPSIZE, WALKFILE, WALKSIZE, BACKGROUNDFILE);
+	Stage stage;
 
+	// Controllers
+	AllegroEventGetter allegroEvents(allegro.getEventQueue());
 	eventHandler.loadController(&allegroEvents);
+	// Falta network controller
 	// Hay que cargar el controller de network
 
-	do {
-		
+	// Observers
+	DrawStage drawStage(JUMPFILE, JUMPPICS, WALKFILE, WALKPICS, BACKGROUNDFILE,STAGEFILE);
+	stage.addObserver(&drawStage);
+	// Falta el observer de network y cargarlo 
+
+	// Worms
+	WormData wormData;
+	Worm worm1(&wormData);
+	stage.createWorms(&worm1);
+	//Worm worm2(&wormData);
+	//stage.createWorms(&worm2); Lo descomento cuadno tenga networking
+
+	bool quit = false;
+
+	while (!stage.isOver()) {
 		eventHandler.getEvent();
-		if (eventHandler.areThereActiveEvents()){
-			int size = 0;
-			Ev_t * events = eventHandler.returnEvent(&size);
+		if (eventHandler.areThereActiveEvents()) {
+			eventHandler.HandleEventDispatch(stage);
 		}
+		eventHandler.events.clear();
+		
 	}
-	
+
+
+
+	return 0;
 }

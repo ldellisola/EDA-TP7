@@ -1,4 +1,4 @@
-#include "EventHandler.h"
+#include "..\Events\EventHandler.h"
 
 
 
@@ -22,7 +22,7 @@ void EventHandler::getEvent()		// El networking tambien tiene que tener un contr
 	for (Controller * controller : controllers) {
 		Ev_t * evs = (Ev_t *) controller->getEvent(&size);
 		for (int i = 0; i < size; i++)
-			events.push_back(evs[i]);
+				events.push_back(evs[i]);
 	}
 }
 
@@ -41,6 +41,8 @@ bool EventHandler::areThereActiveEvents()
 Ev_t * EventHandler::returnEvent(int * size)
 {
 	Ev_t retValue[5];
+	for (int i = 0; i < 5; i++)
+		retValue->deactivate();
 	
 
 	for (int i = 0 ;i < 5 && !events.empty() ; i++){
@@ -51,22 +53,37 @@ Ev_t * EventHandler::returnEvent(int * size)
 	return retValue;
 }
 
-void EventHandler::displatchEvent(Ev_t & ev)
+void EventHandler::displatchEvent(Ev_t & ev, Stage& stage)
 {
 	switch (ev.Event) {
-	case LEFT_EV:
-		break;
-	case RIGHT_EV:
-		break;
-	case JUMP_EV:
-		break;
-	case FLIP_RIGHT_EV:
-		break;
-	case FLIP_LEFT_EV:
-		break;
-	case QUIT_EV:
-		break;
-	case TIMER_EV:
-		break;
+	case LEFT_EV: stage.wormMoveLeft(ev.wormID); break;
+	case RIGHT_EV: stage.wormMoveLeft(ev.wormID); break;
+	case JUMP_EV: stage.wormJump(ev.wormID); break;
+	case FLIP_RIGHT_EV: stage.wormFlipRight(ev.wormID); break;
+	case FLIP_LEFT_EV: stage.wormFlipLeft(ev.wormID); break;
+	case QUIT_EV: stage.quit(); break;
+	case TIMER_EV: stage.refresh();	break;
 	}
+}
+
+
+void EventHandler::HandleEventDispatch(Stage& stage)
+{
+	list<Ev_t>::iterator it;
+
+
+
+	for (it = events.begin(); it != events.end(); ++it) {
+		if (it->active) {
+			displatchEvent(*it, stage);
+			//removeEvent(it);
+		}
+	}	
+
+	events.clear();
+}
+
+void EventHandler::removeEvent(list<Ev_t>::iterator it)
+{
+	events.erase(it);
 }

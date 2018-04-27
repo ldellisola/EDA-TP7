@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Timer.h"
+#include "../Events/Timer.h"
 
 using namespace std;
 
@@ -28,6 +28,7 @@ typedef struct {
 	void deactivate() {
 		active = false;
 		lastEv = Event;
+		
 
 	}
 	void newTimer() {

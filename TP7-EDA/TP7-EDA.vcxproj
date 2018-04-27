@@ -69,7 +69,13 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Allegro_AddonImage>true</Allegro_AddonImage>
+    <Allegro_AddonPrimitives>true</Allegro_AddonPrimitives>
+    <Allegro_AddonAudio>true</Allegro_AddonAudio>
+    <Allegro_AddonAcodec>true</Allegro_AddonAcodec>
+    <Allegro_AddonColor>true</Allegro_AddonColor>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -119,9 +125,12 @@
     <ClCompile Include="Controllers\AllegroEventGetter.cpp" />
     <ClCompile Include="Controllers\Controller.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
+    <ClCompile Include="Events\Timer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Observers\drawStage.cpp" />
     <ClCompile Include="Observers\Observer.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Worm\Worm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllegroClass.h" />
@@ -129,8 +138,11 @@
     <ClInclude Include="Controllers\Controller.h" />
     <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Events\Ev_t.h" />
+    <ClInclude Include="Events\Timer.h" />
     <ClInclude Include="Observers\drawStage.h" />
     <ClInclude Include="Observers\Observer.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="Worm\Worm.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
