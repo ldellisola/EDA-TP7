@@ -1,6 +1,6 @@
 #pragma once
 #include "Controller.h"
-#include "Events\Ev_t.h"
+#include "../Events/Ev_t.h"
 #include <allegro5\allegro.h>
 
 
@@ -16,7 +16,7 @@ public:
 	
 
 private:
-	ALLEGRO_EVENT_QUEUE * eq;
+	ALLEGRO_EVENT_QUEUE * eq = NULL;;
 	bool validKey(int key);
 	void setEvent(Evnt evento, unsigned int wormID = 0);
 	Ev_t ev[2];

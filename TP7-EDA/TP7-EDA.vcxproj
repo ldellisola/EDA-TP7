@@ -118,6 +118,7 @@
     <ClCompile Include="AllegroClass.cpp" />
     <ClCompile Include="Controllers\AllegroEventGetter.cpp" />
     <ClCompile Include="Controllers\Controller.cpp" />
+    <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Observers\drawStage.cpp" />
     <ClCompile Include="Observers\Observer.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="AllegroClass.h" />
     <ClInclude Include="Controllers\AllegroEventGetter.h" />
     <ClInclude Include="Controllers\Controller.h" />
+    <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Events\Ev_t.h" />
     <ClInclude Include="Observers\drawStage.h" />
     <ClInclude Include="Observers\Observer.h" />

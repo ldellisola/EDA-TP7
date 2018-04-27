@@ -11,12 +11,15 @@ class Stage
 public:
 	Stage();
 	~Stage();
-	void draw();
-	void createWorms(info * data);
-	void loadImages(const char * stage_, const char * backg_);
-	vector<Worm> worms;
+	void createWorms(Worm * worm);
+	void wormMoveLeft(unsigned int wormID);
+	void wormMoveRight(unsigned int wormID);
+	void wormJump(unsigned int wormID);
+	void wormFlipLeft(unsigned int wormID);
+	void wormFlipRight(unsigned int wormID);
+	void worm
+	
 private:
-	ALLEGRO_BITMAP * stageBitmap;
-	ALLEGRO_BITMAP * backgroundBitmap;
+	vector<Worm> worms;
 };
 

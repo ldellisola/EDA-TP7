@@ -28,6 +28,9 @@
     <Filter Include="Header Files\Controllers">
       <UniqueIdentifier>{cbe59bde-c430-47bf-80b2-4808c8073517}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Events">
+      <UniqueIdentifier>{f5c8cfca-2ff9-4750-bd61-9a6c902866c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -48,11 +51,11 @@
     <ClCompile Include="Observers\drawStage.cpp">
       <Filter>Source Files\Observers</Filter>
     </ClCompile>
+    <ClCompile Include="Events\EventHandler.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Events\Ev_t.h">
-      <Filter>Source Files\Events</Filter>
-    </ClInclude>
     <ClInclude Include="AllegroClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -67,6 +70,12 @@
     </ClInclude>
     <ClInclude Include="Controllers\Controller.h">
       <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Ev_t.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\EventHandler.h">
+      <Filter>Header Files\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

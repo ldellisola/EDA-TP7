@@ -29,14 +29,16 @@ Evnt trasformAllegroEvents(int key)
 
 AllegroEventGetter::AllegroEventGetter( ALLEGRO_EVENT_QUEUE * eq_)
 {
-	eq = eq_
+	eq = eq_;
 }
 
-Ev_t * AllegroEventGetter::getEvent(void * data)
+void * AllegroEventGetter::getEvent(void * data)
 {
-	ALLEGRO_EVENT_QUEUE * eq = (ALLEGRO_EVENT_QUEUE *)data;
 
 	ALLEGRO_EVENT alEv;
+
+	int * size = (int *)data;
+	*size = 2;
 
 	if (al_get_next_event(eq, &alEv)) {
 
@@ -89,6 +91,8 @@ Ev_t * AllegroEventGetter::getEvent(void * data)
 			}
 		}
 	}
+
+	return ev;
 }
 
 bool AllegroEventGetter::isThereEvent()
