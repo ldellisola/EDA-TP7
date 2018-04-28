@@ -3,6 +3,9 @@
 #include "../Events/Ev_t.h"
 #include <allegro5\allegro.h>
 
+#define WORMID 1
+#define TIMETHRESHOLD (100) // ms
+
 
 class AllegroEventGetter :
 	public Controller
@@ -19,6 +22,7 @@ private:
 	ALLEGRO_EVENT_QUEUE * eq = NULL;;
 	bool validKey(int key);
 	void setEvent(Evnt evento, unsigned int wormID = 0);
-	Ev_t ev[2];
+	Ev_t ev[3];	// 0:Worm , 1:Timer , 2:Quit
+	Ev_t retValue[3];
 };
 

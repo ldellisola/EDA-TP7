@@ -1,6 +1,6 @@
 #include "AllegroEventGetter.h"
 
-#define WORMID 1
+
 
 Evnt trasformAllegroEvents(int key)
 {
@@ -36,26 +36,29 @@ void * AllegroEventGetter::getEvent(void * data)
 {
 	ev[0].deactivate();
 	ev[1].deactivate();
+	ev[2].deactivate();
 
 	ALLEGRO_EVENT alEv;
 
 	int * size = (int *)data;
-	*size = 2;
+	
 
 	if (al_get_next_event(eq, &alEv)) {
 
 		switch (alEv.type) {
 		case ALLEGRO_EVENT_KEY_DOWN:
 
-			if (alEv.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
-				ev[1].Event = QUIT_EV;
+			if (alEv.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+				ev[2].Event = QUIT_EV;
+				ev[2].activate();
+			}
 			else
 				if (!ev[0].active && validKey(alEv.keyboard.keycode) && !ev[0].timerExist())
 					setEvent(trasformAllegroEvents(alEv.keyboard.keycode), WORMID);
 			break;
 		case ALLEGRO_EVENT_KEY_UP:
 			if (ev[0].timerExist() && ev[0].Event == trasformAllegroEvents(alEv.keyboard.keycode)) {
-				if (!ev[0].timerGreaterThan(100))
+				if (!ev[0].timerGreaterThan(TIMETHRESHOLD))
 				{
 					if (!ev[0].active && ev[0].Event == LEFT_EV) {
 						ev[0].Event = FLIP_LEFT_EV;
@@ -71,35 +74,42 @@ void * AllegroEventGetter::getEvent(void * data)
 			this->setEvent(TIMER_EV);
 			ev[1].activate();
 
-
-			
 			if (!ev[0].active && ev[0].timerExist())
 			{
 				ev[0].time->stop();
-				float time_ = ev[0].time->getTime();
-				if (time_ >= 100)
+				if (ev[0].time->getTime() >= TIMETHRESHOLD)
 				{
 					ev[0].activate();
 					ev[0].time->start();
 				}
 			}
-
-
-
 			break;
 		case ALLEGRO_EVENT_DISPLAY_CLOSE:
-			ev[1].Event = QUIT_EV;
+			ev[2].Event = QUIT_EV;
+			ev[2].activate();
 			break;
 			}
 		}
 	}
 
-	return ev;
+	
+	int i = 0;
+
+	if (ev[0].active)
+		retValue[i++] = ev[0];
+	if (ev[1].active)
+		retValue[i++] = ev[1];
+	if (ev[2].active)
+		retValue[i++] = ev[2];
+
+	*size = i;
+
+	return retValue;
 }
 
 bool AllegroEventGetter::isThereEvent()
 {
-	return (ev[0].active || ev[1].active);
+	return (ev[0].active || ev[1].active || ev[2].active);
 }
 
 

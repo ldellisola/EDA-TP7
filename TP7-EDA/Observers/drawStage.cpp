@@ -59,6 +59,7 @@ void DrawStage::update(void * data)
 {
 	Stage * stage = (Stage *)data;
 	al_draw_bitmap(background,0,0,0);
+	al_draw_bitmap(stageBitmap, 0, 0, 0);
 
 
 	vector<Worm> * worms = stage->getWorms();
@@ -74,5 +75,5 @@ void DrawStage::update(void * data)
 
 void DrawStage::drawWorm(float x_, float y_, vector<ALLEGRO_BITMAP*>& sprite, int tick,int flag)
 {
-	al_draw_bitmap(sprite[tick], x_, y_, flag);
+	al_draw_bitmap(sprite[(tick >=1 ? tick -1 : 1)], x_, y_, flag);
 }

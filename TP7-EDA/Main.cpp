@@ -11,7 +11,7 @@
 
 int main(int argc ,char * argv[]) {
 
-	AllegroClass allegro(2000, 1000, 50);
+	AllegroClass allegro(1920, 696, 50);
 	EventHandler eventHandler;
 	Stage stage;
 
@@ -37,11 +37,8 @@ int main(int argc ,char * argv[]) {
 
 	while (!stage.isOver()) {
 		eventHandler.getEvent();
-		if (eventHandler.areThereActiveEvents()) {
+		if (eventHandler.areThereActiveEvents()) 
 			eventHandler.HandleEventDispatch(stage);
-		}
-		eventHandler.events.clear();
-		
 	}
 
 

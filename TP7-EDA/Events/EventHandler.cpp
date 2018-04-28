@@ -57,7 +57,7 @@ void EventHandler::displatchEvent(Ev_t & ev, Stage& stage)
 {
 	switch (ev.Event) {
 	case LEFT_EV: stage.wormMoveLeft(ev.wormID); break;
-	case RIGHT_EV: stage.wormMoveLeft(ev.wormID); break;
+	case RIGHT_EV: stage.wormMoveRight(ev.wormID); break;
 	case JUMP_EV: stage.wormJump(ev.wormID); break;
 	case FLIP_RIGHT_EV: stage.wormFlipRight(ev.wormID); break;
 	case FLIP_LEFT_EV: stage.wormFlipLeft(ev.wormID); break;
@@ -69,21 +69,9 @@ void EventHandler::displatchEvent(Ev_t & ev, Stage& stage)
 
 void EventHandler::HandleEventDispatch(Stage& stage)
 {
-	list<Ev_t>::iterator it;
-
-
-
-	for (it = events.begin(); it != events.end(); ++it) {
-		if (it->active) {
-			displatchEvent(*it, stage);
-			//removeEvent(it);
-		}
-	}	
-
-	events.clear();
+	while (events.size()) {
+		displatchEvent(*events.begin(), stage);
+		events.pop_front();
+	}
 }
 
-void EventHandler::removeEvent(list<Ev_t>::iterator it)
-{
-	events.erase(it);
-}

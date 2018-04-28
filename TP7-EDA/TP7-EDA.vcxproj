@@ -123,7 +123,6 @@
   <ItemGroup>
     <ClCompile Include="AllegroClass.cpp" />
     <ClCompile Include="Controllers\AllegroEventGetter.cpp" />
-    <ClCompile Include="Controllers\Controller.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Events\Timer.cpp" />
     <ClCompile Include="Main.cpp" />

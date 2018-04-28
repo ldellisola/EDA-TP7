@@ -39,9 +39,6 @@
     <ClCompile Include="AllegroClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controllers\Controller.cpp">
-      <Filter>Source Files\Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="Controllers\AllegroEventGetter.cpp">
       <Filter>Source Files\Controllers</Filter>
     </ClCompile>
