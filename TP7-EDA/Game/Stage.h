@@ -1,6 +1,6 @@
 #pragma once
-#include "../TP7-EDA/Worm/Worm.h"
-#include "../TP7-EDA/Observers/Observer.h"
+#include "Worm.h"
+#include "../Observers/Observer.h"
 #include <vector>
 
 using namespace std;

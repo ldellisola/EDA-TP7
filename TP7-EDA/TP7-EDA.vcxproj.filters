@@ -31,12 +31,27 @@
     <Filter Include="Header Files\Events">
       <UniqueIdentifier>{f5c8cfca-2ff9-4750-bd61-9a6c902866c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{4175c8b9-5943-48d4-b090-9c66e5713a33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{0c0d131c-5f78-4603-b5c4-4c38f00fdcd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{a0d7eedd-5aee-47a3-9ef7-2d5a448c2d1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{d9e836e9-5c86-4423-8527-20cb99846fd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Allegro">
+      <UniqueIdentifier>{28db8cac-11ad-44f6-92f9-b96bce33a5f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Allegro">
+      <UniqueIdentifier>{ffbb4b8c-83c4-44c5-957d-4469c02a2606}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AllegroClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Controllers\AllegroEventGetter.cpp">
@@ -54,17 +69,29 @@
     <ClCompile Include="Events\Timer.cpp">
       <Filter>Source Files\Events</Filter>
     </ClCompile>
-    <ClCompile Include="Stage.cpp">
+    <ClCompile Include="CursesClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Worm\Worm.cpp">
+    <ClCompile Include="UserHandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Stage.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Worm.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Allegro\AllegroClass.cpp">
+      <Filter>Source Files\Allegro</Filter>
+    </ClCompile>
+    <ClCompile Include="Allegro\WrittenBox.cpp">
+      <Filter>Source Files\Allegro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AllegroClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Observers\Observer.h">
       <Filter>Header Files\Observers</Filter>
     </ClInclude>
@@ -86,11 +113,26 @@
     <ClInclude Include="Events\Timer.h">
       <Filter>Header Files\Events</Filter>
     </ClInclude>
-    <ClInclude Include="Stage.h">
+    <ClInclude Include="CursesClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Worm\Worm.h">
+    <ClInclude Include="UserHandler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Worm.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Allegro\AllegroClass.h">
+      <Filter>Header Files\Allegro</Filter>
+    </ClInclude>
+    <ClInclude Include="Allegro\WrittenBox.h">
+      <Filter>Header Files\Allegro</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-#include "../Worm/Worm.h"
+#include "Worm.h"
 #include <math.h>
 
 
@@ -41,11 +41,13 @@ void Worm::jump()
 
 void Worm::flipLeft()
 {
-	this->direction = (this->direction == LEFT_DR ? LEFT_DR : LEFT_DR) ;
+	if (state == STILL_ST)
+		this->direction = (this->direction == LEFT_DR ? LEFT_DR : LEFT_DR) ;
 }
 
 void Worm::flipRight() {
-	this->direction = (this->direction == RIGHT_DR ? RIGHT_DR : RIGHT_DR);
+	if (state == STILL_ST)
+		this->direction = (this->direction == RIGHT_DR ? RIGHT_DR : RIGHT_DR);
 }
 
 State Worm::getState()

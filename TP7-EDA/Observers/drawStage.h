@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include "Observer.h"
-#include "../Stage.h"
+#include "../Game/Stage.h"
 #include <allegro5\allegro.h>
 
 

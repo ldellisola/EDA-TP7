@@ -1,7 +1,8 @@
-
-#include "AllegroClass.h"
+#include "CursesClass.h"
+#include "Allegro/AllegroClass.h"
 #include "Events\EventHandler.h"
-#include "Stage.h"
+#include "UserHandler.h"
+#include "Game/Stage.h"
 #include "Controllers\AllegroEventGetter.h"
 #include "Observers\drawStage.h"
 
@@ -10,10 +11,25 @@
 
 
 int main(int argc ,char * argv[]) {
+	// Pregunto si soy server o CLient
+
+	CursesClass *curses = new CursesClass;
+
+	switch (selectMode(*curses)) {
+	case SERVER:
+		break;
+	case CLIENT:
+		break;
+	case LEAVE:
+		break;
+	}
+	delete curses;
 
 	AllegroClass allegro(1920, 696, 50);
 	EventHandler eventHandler;
 	Stage stage;
+
+
 
 	// Controllers
 	AllegroEventGetter allegroEvents(allegro.getEventQueue());
@@ -45,3 +61,4 @@ int main(int argc ,char * argv[]) {
 
 	return 0;
 }
+

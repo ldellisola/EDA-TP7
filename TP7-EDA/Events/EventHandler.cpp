@@ -28,14 +28,8 @@ void EventHandler::getEvent()		// El networking tambien tiene que tener un contr
 
 bool EventHandler::areThereActiveEvents()
 {
-	bool retValue = false;
-
-	for (Ev_t& ev : events) 
-		if (ev.active)
-			retValue = true;
 	
-
-	return retValue;
+	return (events.size() == 0 ? false: true);
 }
 
 Ev_t * EventHandler::returnEvent(int * size)

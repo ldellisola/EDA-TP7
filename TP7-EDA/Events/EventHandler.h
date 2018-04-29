@@ -1,7 +1,7 @@
 #pragma once
 #include "../Controllers\Controller.h"
 #include "Ev_t.h"
-#include "../Stage.h"
+#include "../Game/Stage.h"
 #include <vector>
 #include <list>
 

@@ -6,17 +6,25 @@
 
 // Comment the libraries you are not goiing to use
 
-//#define FONT_C
+#define FONT_C
 //#define AUDIO_C
 #define IMAGE_C
 //#define PRIMITIVES_C
-//#define COLOR_C
+#define COLOR_C
 
 #define DISPLAY_C
 #define EVENTS_C
 #define TIMER_C
 #define KEYBOARD_C
 //#define MOUSE_C
+
+
+// Para usar libreria necesito estos dos addons
+#ifdef COLOR_C
+#ifdef FONT_C
+#include "WrittenBox.h"
+#endif
+#endif
 
 #ifdef IMAGE_C
 #include <allegro5\allegro_image.h>
@@ -52,7 +60,7 @@ enum resources
 class AllegroClass
 {
 public:
-	AllegroClass(float displayW_ = 0, float displayH_ = 0, float fps_ = 0);
+	AllegroClass(float displayW_, float displayH_, float fps_);
 	~AllegroClass();
 #ifdef DISPLAY_C
 	void updateDisplay();
