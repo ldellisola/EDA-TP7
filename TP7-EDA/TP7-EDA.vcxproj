@@ -156,12 +156,19 @@
     <ClCompile Include="CursesClass.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Events\Timer.cpp" />
+    <ClCompile Include="FSM Client\eventsClient.cpp" />
+    <ClCompile Include="FSM Client\fsmClient.cpp" />
+    <ClCompile Include="FSM Server\eventsServer.cpp" />
+    <ClCompile Include="FSM Server\fsmServer.cpp" />
     <ClCompile Include="Game\Stage.cpp" />
     <ClCompile Include="Game\Worm.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NetworkEvents.cpp" />
+    <ClCompile Include="Network\Client.cpp" />
+    <ClCompile Include="Network\Packet.cpp" />
+    <ClCompile Include="Network\Sever.cpp" />
     <ClCompile Include="Observers\drawStage.cpp" />
     <ClCompile Include="Observers\Observer.cpp" />
-    <ClCompile Include="Packet.cpp" />
     <ClCompile Include="UserHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,11 +180,19 @@
     <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Events\Ev_t.h" />
     <ClInclude Include="Events\Timer.h" />
+    <ClInclude Include="FSM Client\eventsClient.h" />
+    <ClInclude Include="FSM Client\fsmClient.h" />
+    <ClInclude Include="FSM Server\eventsServer.h" />
+    <ClInclude Include="FSM Server\fsmServer.h" />
+    <ClInclude Include="FSMData.h" />
     <ClInclude Include="Game\Stage.h" />
     <ClInclude Include="Game\Worm.h" />
+    <ClInclude Include="Network\Client.h" />
+    <ClInclude Include="Network\NetworkEvents.h" />
+    <ClInclude Include="Network\Packet.h" />
+    <ClInclude Include="Network\Server.h" />
     <ClInclude Include="Observers\drawStage.h" />
     <ClInclude Include="Observers\Observer.h" />
-    <ClInclude Include="Packet.h" />
     <ClInclude Include="UserHandler.h" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +204,12 @@
     <Import Project="..\packages\Allegro.5.2.4.0\build\native\Allegro.targets" Condition="Exists('..\packages\Allegro.5.2.4.0\build\native\Allegro.targets')" />
     <Import Project="..\packages\PDCurses34.redist.3.4.0.1\build\native\PDCurses34.redist.targets" Condition="Exists('..\packages\PDCurses34.redist.3.4.0.1\build\native\PDCurses34.redist.targets')" />
     <Import Project="..\packages\PDCurses34.3.4.0.1\build\native\PDCurses34.targets" Condition="Exists('..\packages\PDCurses34.3.4.0.1\build\native\PDCurses34.targets')" />
+    <Import Project="..\packages\boost.1.67.0.0\build\boost.targets" Condition="Exists('..\packages\boost.1.67.0.0\build\boost.targets')" />
+    <Import Project="..\packages\boost_chrono-vc141.1.67.0.0\build\boost_chrono-vc141.targets" Condition="Exists('..\packages\boost_chrono-vc141.1.67.0.0\build\boost_chrono-vc141.targets')" />
+    <Import Project="..\packages\boost_date_time-vc141.1.67.0.0\build\boost_date_time-vc141.targets" Condition="Exists('..\packages\boost_date_time-vc141.1.67.0.0\build\boost_date_time-vc141.targets')" />
+    <Import Project="..\packages\boost_regex-vc141.1.67.0.0\build\boost_regex-vc141.targets" Condition="Exists('..\packages\boost_regex-vc141.1.67.0.0\build\boost_regex-vc141.targets')" />
+    <Import Project="..\packages\boost_system-vc141.1.67.0.0\build\boost_system-vc141.targets" Condition="Exists('..\packages\boost_system-vc141.1.67.0.0\build\boost_system-vc141.targets')" />
+    <Import Project="..\packages\boost_timer-vc141.1.67.0.0\build\boost_timer-vc141.targets" Condition="Exists('..\packages\boost_timer-vc141.1.67.0.0\build\boost_timer-vc141.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -198,5 +219,11 @@
     <Error Condition="!Exists('..\packages\Allegro.5.2.4.0\build\native\Allegro.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Allegro.5.2.4.0\build\native\Allegro.targets'))" />
     <Error Condition="!Exists('..\packages\PDCurses34.redist.3.4.0.1\build\native\PDCurses34.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PDCurses34.redist.3.4.0.1\build\native\PDCurses34.redist.targets'))" />
     <Error Condition="!Exists('..\packages\PDCurses34.3.4.0.1\build\native\PDCurses34.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PDCurses34.3.4.0.1\build\native\PDCurses34.targets'))" />
+    <Error Condition="!Exists('..\packages\boost.1.67.0.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.67.0.0\build\boost.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_chrono-vc141.1.67.0.0\build\boost_chrono-vc141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_chrono-vc141.1.67.0.0\build\boost_chrono-vc141.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_date_time-vc141.1.67.0.0\build\boost_date_time-vc141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_date_time-vc141.1.67.0.0\build\boost_date_time-vc141.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_regex-vc141.1.67.0.0\build\boost_regex-vc141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_regex-vc141.1.67.0.0\build\boost_regex-vc141.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_system-vc141.1.67.0.0\build\boost_system-vc141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_system-vc141.1.67.0.0\build\boost_system-vc141.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_timer-vc141.1.67.0.0\build\boost_timer-vc141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_timer-vc141.1.67.0.0\build\boost_timer-vc141.targets'))" />
   </Target>
 </Project>

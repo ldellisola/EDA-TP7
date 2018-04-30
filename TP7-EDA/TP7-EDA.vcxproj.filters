@@ -49,6 +49,24 @@
     <Filter Include="Source Files\Allegro">
       <UniqueIdentifier>{ffbb4b8c-83c4-44c5-957d-4469c02a2606}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\FSM">
+      <UniqueIdentifier>{0e226fe8-375b-4f1a-a214-064fd656006c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FSM\Server">
+      <UniqueIdentifier>{1ed983b1-0089-4944-a804-7e5fddfeaad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FSM\Client">
+      <UniqueIdentifier>{d50e6679-0e1c-4b3d-a8c3-2bbc9e7fe0cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FSM">
+      <UniqueIdentifier>{3203800d-fb13-459d-b18a-4bb2cdc88b79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FSM\Client">
+      <UniqueIdentifier>{7831713a-d3c7-4c9d-be41-fc7e8f2e12a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FSM\Server">
+      <UniqueIdentifier>{f5d752a8-1576-45fc-9321-3f003a4d7035}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -75,9 +93,6 @@
     <ClCompile Include="UserHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Packet.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Stage.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
@@ -89,6 +104,30 @@
     </ClCompile>
     <ClCompile Include="Allegro\WrittenBox.cpp">
       <Filter>Source Files\Allegro</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Client.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Sever.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkEvents.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="FSM Server\fsmServer.cpp">
+      <Filter>Source Files\FSM\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="FSM Server\eventsServer.cpp">
+      <Filter>Source Files\FSM\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="FSM Client\fsmClient.cpp">
+      <Filter>Source Files\FSM\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="FSM Client\eventsClient.cpp">
+      <Filter>Source Files\FSM\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Packet.cpp">
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +158,6 @@
     <ClInclude Include="UserHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Stage.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
@@ -133,6 +169,33 @@
     </ClInclude>
     <ClInclude Include="Allegro\WrittenBox.h">
       <Filter>Header Files\Allegro</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Client.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Server.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\NetworkEvents.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM Server\eventsServer.h">
+      <Filter>Header Files\FSM\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM Server\fsmServer.h">
+      <Filter>Header Files\FSM\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM Client\eventsClient.h">
+      <Filter>Header Files\FSM\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM Client\fsmClient.h">
+      <Filter>Header Files\FSM\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMData.h">
+      <Filter>Header Files\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Packet.h">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

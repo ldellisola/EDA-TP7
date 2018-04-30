@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "../Events/Timer.h"
+#include <cstdint>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ typedef struct {
 	Evnt Event;
 	Evnt lastEv;
 	Timer * time;
-	unsigned int wormID;
+	uint32_t wormID;
 	bool active;
 	int keycode;
 	bool keyPressed = true;
