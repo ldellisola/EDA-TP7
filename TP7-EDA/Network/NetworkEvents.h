@@ -40,10 +40,10 @@ private:
 	Server * server = NULL;
 
 	bool fsmClient = false;
-	fsmC * fsmC = NULL;
+	fsmC * fsmCL = NULL;	//CAMBIE EL NOMBRE A fsmCL por que sino no compilaba
 
 	bool fsmServer = false;
-	fsmS * fsmS = NULL;
+	fsmS * fsmSE = NULL;	//CAMBIE EL NOMBRE A fsmSE por que sino no compilaba
 
 	Ev_t retEv;
 	fsmData infoForFsm;

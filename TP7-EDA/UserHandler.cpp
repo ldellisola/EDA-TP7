@@ -1,24 +1,68 @@
 #include "UserHandler.h"
 
-MODE selectMode(CursesClass& curses)
+
+MODE selectmode(ALLEGRO_EVENT_QUEUE * ev_que)
 {
-	mvprintw(0, 0, "Press 'S' to be Server or press 'C' to be Client. If you rather leave, pres 'Q'");
-	char value;
-	bool valid = false;
-	while (!valid) {
-		value = curses.getSingleLoweredCharInRange('a', 'z', 2, 0, "Invalid character, please try again");
-		if (value == 's' || value == 'c' ||value == 'q')
-			valid = true;
-		else
+	MODE respuesta;
+	ALLEGRO_BITMAP* fondo = al_load_bitmap("background.png");
+	al_draw_bitmap(fondo, 0, 0, 0);
+	WrittenBox bienvenida(700, 50, 400, 80, 40, "MODE SELECTION", "Montserrat-Black.otf", "black");
+	bienvenida.draw();
+	WrittenBox instrucciones(400, 120, 1000, 40, 20, "Select your role with your keyboard. Press Q to exit", "Montserrat-Black.otf","white");
+	instrucciones.draw();
+	WrittenBox opcionS(550, 250, 400, 40, 20, "S = SERVER", "Montserrat-Black.otf", "red");
+	WrittenBox opcionC(750, 250, 400, 40, 20, "C = CLIENT", "Montserrat-Black.otf", "yellow");
+	opcionS.draw();
+	opcionC.draw();
+	WrittenBox warning(550, 350, 600, 40, 20, "Invalid imput, only S, C or Q are valid options", "Montserrat-Black.otf", "green");
+	al_flip_display();
+	ALLEGRO_EVENT ev;
+	bool looping = true;
+	while (looping)
+	{
+		if (al_get_next_event(ev_que, &ev))
 		{
-			mvdeleteln(1, 0);
-			mvprintw(1, 0, "ERROR, try again");
+			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+			{
+				respuesta = LEAVE;
+				looping = false;
+			}
+			else if (ev.type == ALLEGRO_EVENT_KEY_UP)
+			{
+				switch (ev.keyboard.keycode)
+				{
+				case ALLEGRO_KEY_S:
+					respuesta = SERVER;
+					looping = false;
+					break;
+				case ALLEGRO_KEY_C:
+					respuesta = CLIENT;
+					looping = false;
+					break;
+				case ALLEGRO_KEY_Q:
+					looping = false;
+					respuesta = LEAVE;
+					break;
+
+				default:
+					warning.draw();
+					al_flip_display();
+					break;
+				}
+			}
 		}
 	}
+	return respuesta;
 
-	return (value == 'q' ? LEAVE : (value == 's' ? SERVER : CLIENT));
-	
 }
+
+
+
+
+
+
+
+
 
 string askForFile(CursesClass & curses)
 {
@@ -78,3 +122,9 @@ bool askToOverwrite(CursesClass & curses)
 
 	return retValue;
 }
+
+void initNetworkControlScreen(CursesClass& curses)
+{
+	mvprintw(8, 0, "HOLA MUNDO2!");
+}
+

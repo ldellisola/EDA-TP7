@@ -19,6 +19,8 @@ void waitEvent_QuitRecieved_s(void *data);
 
 void waitAck_AckRecieved_s(void *data);
 
+void notReady_AnswerIAM_s(void * data);
+
 
 
 //manejo del evento error. 

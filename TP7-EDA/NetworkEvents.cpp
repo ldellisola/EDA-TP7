@@ -33,41 +33,41 @@ bool NetworkEvents::initClient() {
 	bool success = false;
 	fsmData * fsminfo;
 
-	fsminfo = (fsmData *)this->fsmC->getData();
+	fsminfo = (fsmData *)this->fsmCL->getData();
 	//Espero a que me llegue un IAM del server
 	Packet packet;
 	fsminfo->timeouts = 0;
 	string msg;
 
 	if (getInfoWithTimeout(server, msg, fsminfo))
-		this->fsmC->setEvent(ERROR_FSM);
+		this->fsmCL->setEvent(ERROR_FSM);
 	else {
 		packet.setPacket(msg);
 		if (IAM_HD == packet.getHeader()) {
 			fsminfo->wormXOther = packet.getWormX();
-			fsmC->setEvent(IAM_FSM);
+			fsmCL->setEvent(IAM_FSM);
 		}
 		else
-			fsmC->setEvent(ERROR_FSM);
+			fsmCL->setEvent(ERROR_FSM);
 	}
 	// Me llego perfecto el IAM Entro en la fsm
 	do {
-		this->fsmC->run();
+		this->fsmCL->run();
 		// Aca ya le mande mi IAM y estoy esperando a que me llegue un ACK.
 		Packet packet;
 		fsminfo->timeouts = 0;
 		string msg;
 
 		if (getInfoWithTimeout(server, msg, fsminfo))
-			this->fsmC->setEvent(ERROR_FSM);
+			this->fsmCL->setEvent(ERROR_FSM);
 		else {
 			packet.setPacket(msg);
 			if (ACKQ_HD == packet.getHeader()) {
-				fsmC->setEvent(ACK_FSM);
+				fsmCL->setEvent(ACK_FSM);
 				success = true;
 			}
 			else
-				fsmC->setEvent(ERROR_FSM);
+				fsmCL->setEvent(ERROR_FSM);
 			// Me llega el ACK hermoso
 
 		}
@@ -78,7 +78,7 @@ bool NetworkEvents::initClient() {
 
 bool NetworkEvents::initServer() {
 	bool success = false;
-	fsmData * fsminfo;
+	fsmData * fsminfo = NULL; // ESTO ME TIRA EXCEPTION PERO SI NO LO INICALIZO NO COMPILA
 
 	// PASOS:
 
@@ -90,24 +90,25 @@ bool NetworkEvents::initServer() {
 	// Espero a que venga un IAM del cliente
 	string msg;
 	if (getInfoWithTimeout(server, msg, fsminfo))
-		this->fsmS->setEvent(ERROR_FSM);
+		this->fsmSE->setEvent(ERROR_FSM);
 	else {
 		packet.setPacket(msg);
 		if (IAM_HD == packet.getHeader()) {
 			fsminfo->wormXOther = packet.getWormX();
-			fsmS->setEvent(ANS_IAM_FSM);
+			fsmSE->setEvent(ANS_IAM_FSM);
 			success = true;
 		}
 		else
-			fsmS->setEvent(ERROR_FSM);
+			fsmSE->setEvent(ERROR_FSM);
 
 		do {
-			this->fsmS->run();
+			this->fsmSE->run();
 			// Dentro de la FSM se manda el ultimo ACK y somos todos felices
 		} while (!fsminfo->leave);
 
 
 	}
+	return success;
 }
 
 
@@ -130,13 +131,13 @@ void NetworkEvents::loadClient(Client * client)
 
 void NetworkEvents::loadFSMClient(fsmC * client)
 {
-	this->fsmC = client;
+	this->fsmCL = client;
 	fsmClient = true;
 }
 
 void NetworkEvents::loadFSMServer(fsmS * server)
 {
-	this->fsmS = server;
+	this->fsmSE = server;
 	fsmServer = true;
 }
 
@@ -148,12 +149,12 @@ void NetworkEvents::update(void * data)
 	if (fsmClient && data!= NULL) {
 		extEv = *(Ev_t *)data;
 
-		fsminfo = (fsmData *)this->fsmC->getData();
+		fsminfo = (fsmData *)this->fsmCL->getData();
 		fsminfo->ev = extEv;
-		this->fsmC->setEvent(SEND_FSM);
+		this->fsmCL->setEvent(SEND_FSM);
 
 		do {
-			this->fsmC->run();
+			this->fsmCL->run();
 			
 			Packet packet;
 			fsminfo->timeouts = 0;
@@ -161,13 +162,13 @@ void NetworkEvents::update(void * data)
 
 
 			if (getInfoWithTimeout(server, msg, fsminfo))
-				this->fsmC->setEvent(ERROR_FSM);
+				this->fsmCL->setEvent(ERROR_FSM);
 			else {
 				packet.setPacket(msg);
 				if(!(fsminfo->ev.wormID - packet.getWormID()))
-					this->fsmC->setEvent(ACK_FSM);
+					this->fsmCL->setEvent(ACK_FSM);
 				else
-					this->fsmC->setEvent(ERROR_FSM);
+					this->fsmCL->setEvent(ERROR_FSM);
 
 			}
 
@@ -178,21 +179,21 @@ void NetworkEvents::update(void * data)
 	}
 	else if (fsmServer && data != NULL) {
 		extEv = *(Ev_t *)data;
-		fsminfo = (fsmData *)this->fsmS->getData();
+		fsminfo = (fsmData *)this->fsmSE->getData();
 		fsminfo->ev = extEv;
-		this->fsmC->setEvent(SEND_FSM);
+		this->fsmCL->setEvent(SEND_FSM);
 
 		do {
-			this->fsmC->run();
+			this->fsmCL->run();
 
 			Packet packet;
 			fsminfo->timeouts = 0;
 			string msg;
 
 			if (getInfoWithTimeout(server, msg, fsminfo))
-				this->fsmS->setEvent(ERROR_FSM);
+				this->fsmSE->setEvent(ERROR_FSM);
 			else {
-				this->fsmS->setEvent(ACK_FSM);
+				this->fsmSE->setEvent(ACK_FSM);
 				packet.setPacket(msg);
 				fsminfo->ev.wormID = packet.getWormID();
 			}
@@ -216,7 +217,7 @@ void * NetworkEvents::getEvent(void * data)
 		// El primer evento que tiene que recibir la FSM es de Mandar un ACK, es decir, le llego un evento de MOVE.
 		// Despues de eso sale de la FSM.
 
-		fsminfo = (fsmData *)this->fsmC->getData();
+		fsminfo = (fsmData *)this->fsmCL->getData();
 
 		Packet packet;
 		fsminfo->timeouts = 0;
@@ -224,10 +225,10 @@ void * NetworkEvents::getEvent(void * data)
 
 
 		if (getInfoWithTimeout(server, msg, fsminfo))
-			this->fsmC->setEvent(ERROR_FSM);
+			this->fsmCL->setEvent(ERROR_FSM);
 		else {
 			packet.setPacket(msg);
-			this->fsmC->setEvent(MOVE_FSM);
+			this->fsmCL->setEvent(MOVE_FSM);
 			
 			this->retEv = packet.getPacketEvent();
 			*size = 1;
@@ -235,7 +236,7 @@ void * NetworkEvents::getEvent(void * data)
 		}
 		do {
 
-			this->fsmC->run();
+			this->fsmCL->run();
 		} while (!fsminfo->leave);
 
 
@@ -245,7 +246,7 @@ void * NetworkEvents::getEvent(void * data)
 		// El primer evento que tiene que recibir la FSM es de Mandar un ACK, es decir, le llego un evento de MOVE.
 		// Despues de eso sale de la FSM.
 
-		fsminfo = (fsmData *)this->fsmS->getData();
+		fsminfo = (fsmData *)this->fsmSE->getData();
 
 		Packet packet;
 		fsminfo->timeouts = 0;
@@ -253,9 +254,9 @@ void * NetworkEvents::getEvent(void * data)
 	
 
 		if (getInfoWithTimeout(server, msg, fsminfo))
-			this->fsmS->setEvent(ERROR_FSM);
+			this->fsmSE->setEvent(ERROR_FSM);
 		else {
-			this->fsmS->setEvent(MOVE_FSM);
+			this->fsmSE->setEvent(MOVE_FSM);
 			packet.setPacket(msg);
 			this->retEv = packet.getPacketEvent();
 			*size = 1;
@@ -264,7 +265,7 @@ void * NetworkEvents::getEvent(void * data)
 
 		do {
 
-			this->fsmS->run();
+			this->fsmSE->run();
 		} while (!fsminfo->leave);
 
 	}

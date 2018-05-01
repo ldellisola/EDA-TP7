@@ -13,7 +13,7 @@ WrittenBox::WrittenBox(float x_, float y_, float width_, float height_, int font
 	this->height = height_;
 	this->text = text_;
 	this->bitmap = al_create_bitmap(width_, height_);
-	this->font = al_load_font(fontPath, -fontSize_, ALLEGRO_ALIGN_CENTRE);
+	this->font = al_load_font(fontPath, -fontSize_, ALLEGRO_ALIGN_CENTER);
 	this->fontColor = al_color_name(fontColor);
 
 	ALLEGRO_BITMAP * c = al_get_backbuffer(al_get_current_display());
@@ -21,9 +21,10 @@ WrittenBox::WrittenBox(float x_, float y_, float width_, float height_, int font
 
 	al_clear_to_color(al_map_rgba(0, 0, 0, 0));
 
-	al_draw_text(this->font, this->fontColor, this->width / 2.0, this->height / 2.0, ALLEGRO_ALIGN_CENTRE, this->text.c_str());
-
+	al_draw_text(this->font, this->fontColor, this->width / 2.0, this->height / 2.0, ALLEGRO_ALIGN_CENTER, this->text.c_str());
+	
 	al_set_target_bitmap(c);
+	
 
 }
 

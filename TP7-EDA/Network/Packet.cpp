@@ -1,5 +1,5 @@
 #include "Packet.h"
-#include "Network\Packet.h"
+#include "..\Network\Packet.h"
 
 
 

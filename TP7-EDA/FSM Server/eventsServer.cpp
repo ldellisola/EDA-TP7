@@ -10,7 +10,7 @@ STATE notREADY_s[] = {
 { MOVE_FSM,notREADY_s,failedcom_s },
 { ACK_FSM,notREADY_s,failedcom_s },
 { QUIT_FSM,notREADY_s,failedcom_s },
-{ ERROR,notREADY_s,errorfun_s },
+{ ERROR_FSM,notREADY_s,errorfun_s },
 { IAM_FSM,waitEVENT_s,notReady_ReadyRecieved_s },
 { END,notREADY_s,reset_s },
 };
@@ -21,7 +21,7 @@ STATE waitEVENT_s[] = {
 { MOVE_FSM,waitEVENT_s,waitEvent_SendEvent_s },
 { ACK_FSM,notREADY_s,failedcom_s },
 { QUIT_FSM,notREADY_s,waitEvent_QuitRecieved_s},
-{ ERROR,notREADY_s,errorfun_s },
+{ ERROR_FSM,notREADY_s,errorfun_s },
 { IAM_FSM, notREADY_s,failedcom_s },
 { END,notREADY_s,reset_s },
 };
@@ -32,7 +32,7 @@ STATE waitACK_s[] = {
 { SEND_FSM,notREADY_s,failedcom_s },
 { ACK_FSM,waitEVENT_s,waitAck_AckRecieved_s },
 { QUIT_FSM,notREADY_s, failedcom_s },
-{ ERROR,notREADY_s,errorfun_s },
+{ ERROR_FSM,notREADY_s,errorfun_s },
 { IAM_FSM,notREADY_s,failedcom_s },
 { END,notREADY_s,reset_s },
 };
