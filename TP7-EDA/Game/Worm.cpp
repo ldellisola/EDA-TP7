@@ -4,7 +4,7 @@
 
 
 using namespace std;
-Worm::Worm(WormData * data, float xoffset_, Direction dir)
+Worm::Worm(WormData * data, uint32_t wormID_, float xoffset_, Direction dir)
 {
 	this->data = data;
 	this->coord.x = this->data->minX + xoffset_ ; 

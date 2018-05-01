@@ -13,6 +13,7 @@ STATE waitACK_c[];
 
 
 // Estado actual _  Evento recibido
+void notReady_AnswerIAM_c(void * data);
 
 void notReady_ReadyRecieved_c(void *data);
 

@@ -1,5 +1,6 @@
 
 #include "Network\NetworkEvents.h"
+
 bool getInfoWithTimeout(Server * server,string& msg, fsmData * fsminfo)
 {
 	bool error = false;
@@ -28,14 +29,31 @@ NetworkEvents::~NetworkEvents()
 {
 }
 
-bool NetworkEvents::init()
-{
+bool NetworkEvents::initClient() {
 	bool success = false;
 	fsmData * fsminfo;
 
-	if (fsmClient) {
-		fsminfo = (fsmData *)this->fsmC->getData();
-		//Espero a que me llegue un IAM del server
+	fsminfo = (fsmData *)this->fsmC->getData();
+	//Espero a que me llegue un IAM del server
+	Packet packet;
+	fsminfo->timeouts = 0;
+	string msg;
+
+	if (getInfoWithTimeout(server, msg, fsminfo))
+		this->fsmC->setEvent(ERROR_FSM);
+	else {
+		packet.setPacket(msg);
+		if (IAM_HD == packet.getHeader()) {
+			fsminfo->wormXOther = packet.getWormX();
+			fsmC->setEvent(IAM_FSM);
+		}
+		else
+			fsmC->setEvent(ERROR_FSM);
+	}
+	// Me llego perfecto el IAM Entro en la fsm
+	do {
+		this->fsmC->run();
+		// Aca ya le mande mi IAM y estoy esperando a que me llegue un ACK.
 		Packet packet;
 		fsminfo->timeouts = 0;
 		string msg;
@@ -44,90 +62,58 @@ bool NetworkEvents::init()
 			this->fsmC->setEvent(ERROR_FSM);
 		else {
 			packet.setPacket(msg);
-			if (IAM_HD == packet.getHeader()) {
-				fsminfo->wormXOther = packet.getWormX();
-				fsmC->setEvent(IAM_FSM);
+			if (ACKQ_HD == packet.getHeader()) {
+				fsmC->setEvent(ACK_FSM);
+				success = true;
 			}
 			else
 				fsmC->setEvent(ERROR_FSM);
+			// Me llega el ACK hermoso
+
 		}
-		// Me llego perfecto el IAM Entro en la fsm
-		do {
-			this->fsmC->run();
-			// Aca ya le mande mi IAM y estoy esperando a que me llegue un ACK.
-			Packet packet;
-			fsminfo->timeouts = 0;
-			string msg;
-
-			if (getInfoWithTimeout(server, msg, fsminfo))
-				this->fsmC->setEvent(ERROR_FSM);
-			else {
-				packet.setPacket(msg);
-				if (ACKQ_HD == packet.getHeader()) {
-					fsmC->setEvent(ACK_FSM);
-				}
-				else
-					fsmC->setEvent(ERROR_FSM);
-				// Me llega el ACK hermoso
-
-			} 
-		} while (!fsminfo->leave);
-
-	}
-	else if (fsmServer) {
-
-		// PASOS:
-
-		// Mando un IAM al cliente
-		Packet packet;
-		packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, fsminfo->wormXMine);
-
-		
-		fsminfo->timeouts = 0;
-		string msg;
-
-		if (getInfoWithTimeout(server, msg, fsminfo))
-			this->fsmS->setEvent(ERROR_FSM);
-		else {
-			packet.setPacket(msg);
-			if (IAM_HD == packet.getHeader()) {
-				fsminfo->wormXOther = packet.getWormX();
-				fsmS->setEvent(IAM_FSM);
-			}
-			else
-				fsmS->setEvent(ERROR_FSM);
-		}
-		do {
-			this->fsmS->run();
-			// Aca ya le mande mi IAM y estoy esperando a que me llegue un ACK.
-			Packet packet;
-			fsminfo->timeouts = 0;
-			string msg;
-
-
-			if (getInfoWithTimeout(server, msg, fsminfo))
-				this->fsmS->setEvent(ERROR_FSM);
-			else {
-				packet.setPacket(msg);
-				if (ACKQ_HD == packet.getHeader()) {
-					fsmS->setEvent(ACK_FSM);
-					success = true;
-				}
-				else
-					fsmS->setEvent(ERROR_FSM);
-
-
-			}
-		} while (!fsminfo->leave);
-
-	}
-
-	// Hay que correr la FSM, que empieza en el modo notReady, como es cliente tiene que esperar a que el server le mande un "IAM_FSM"
-	//Cuando recibe el IAM, Le manda otro IAM al server, a lo que el server le responde ACK y sale del init
-
+	} while (!fsminfo->leave);
 
 	return success;
 }
+
+bool NetworkEvents::initServer() {
+	bool success = false;
+	fsmData * fsminfo;
+
+	// PASOS:
+
+	// Mando un IAM al cliente
+	Packet packet;
+	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, fsminfo->wormXMine);
+	client->sendMessage(packet.createIAM());
+
+	// Espero a que venga un IAM del cliente
+	string msg;
+	if (getInfoWithTimeout(server, msg, fsminfo))
+		this->fsmS->setEvent(ERROR_FSM);
+	else {
+		packet.setPacket(msg);
+		if (IAM_HD == packet.getHeader()) {
+			fsminfo->wormXOther = packet.getWormX();
+			fsmS->setEvent(ANS_IAM_FSM);
+			success = true;
+		}
+		else
+			fsmS->setEvent(ERROR_FSM);
+
+		do {
+			this->fsmS->run();
+			// Dentro de la FSM se manda el ultimo ACK y somos todos felices
+		} while (!fsminfo->leave);
+
+
+	}
+}
+
+
+
+
+
 
 void NetworkEvents::loadServer(Server * server)
 {
@@ -140,6 +126,18 @@ void NetworkEvents::loadClient(Client * client)
 {
 	this->client = client;
 	infoForFsm.client = client;
+}
+
+void NetworkEvents::loadFSMClient(fsmC * client)
+{
+	this->fsmC = client;
+	fsmClient = true;
+}
+
+void NetworkEvents::loadFSMServer(fsmS * server)
+{
+	this->fsmS = server;
+	fsmServer = true;
 }
 
 void NetworkEvents::update(void * data)
@@ -178,7 +176,7 @@ void NetworkEvents::update(void * data)
 
 
 	}
-	else if (fsmServer && data !=NULL) {
+	else if (fsmServer && data != NULL) {
 		extEv = *(Ev_t *)data;
 		fsminfo = (fsmData *)this->fsmS->getData();
 		fsminfo->ev = extEv;
@@ -273,5 +271,10 @@ void * NetworkEvents::getEvent(void * data)
 
 	return &retEv;
 
+}
+
+fsmData NetworkEvents::getFSMData()
+{
+	return infoForFsm;
 }
 

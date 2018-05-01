@@ -5,6 +5,7 @@
 
 
 STATE notREADY_c[] = {
+{ ANS_IAM_FSM , waitEVENT_c,notReady_AnswerIAM_c },
 { MOVE_FSM,notREADY_c,failedcom_c },
 { SEND_FSM,notREADY_c,failedcom_c },
 { ACK_FSM,notREADY_c,failedcom_c },
@@ -15,6 +16,7 @@ STATE notREADY_c[] = {
 };
 // Tendria que ahcer que cuando llega el ACK o cuando Mando un ACK, que salga del loop. Lo mismo si hay un error
 STATE waitEVENT_c[] = {
+{ ANS_IAM_FSM , notREADY_c,failedcom_c },
 { SEND_FSM,waitACK_c,waitEvent_SendEvent_c },
 { MOVE_FSM,waitEVENT_c,waitEvent_GetEvent_c},
 { ACK_FSM,notREADY_c,failedcom_c },
@@ -25,6 +27,7 @@ STATE waitEVENT_c[] = {
 };
 
 STATE waitACK_c[] = {
+{ ANS_IAM_FSM, notREADY_c,failedcom_c },
 { MOVE_FSM,notREADY_c,failedcom_c },
 { SEND_FSM,notREADY_c,failedcom_c },
 { ACK_FSM,waitEVENT_c,waitAck_AckRecieved_c },
@@ -50,6 +53,16 @@ int8_t TransformEvent_c(Evnt ev) {
 	}
 
 }
+
+void notReady_AnswerIAM_c(void * data) {
+	cout << "IAM recieved. Sending ACK" << endl;
+	fsmData * pointer = (fsmData *)data;
+	Packet packet;
+	packet.setPacket(ACKQ_HD, NOTLOADED, 0, NOTLOADED);
+	pointer->client->sendMessage(packet.createACKQ());
+	cout << "ACK sent" << endl;
+}
+
 ///OK
 void notReady_ReadyRecieved_c(void * data)
 {

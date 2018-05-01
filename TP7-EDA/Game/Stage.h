@@ -13,7 +13,7 @@ typedef enum ActionType
 class Stage
 {
 public:
-	Stage();
+	Stage(uint32_t myID_, uint32_t otherID_);
 	~Stage();
 	void createWorms(Worm * worm);
 	vector<Worm> * getWorms();
@@ -32,6 +32,10 @@ public:
 
 	
 private:
+	unsigned int trasnformIDintoPos(unsigned int wormID);
+
+	uint32_t myID;
+	uint32_t otherID;
 	vector<Worm> worms;
 	vector<Observer *> observers;
 	ActionType lastAction;

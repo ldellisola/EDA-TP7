@@ -1,15 +1,19 @@
 #include "Stage.h"
 
 
-unsigned int trasnformIDintoPos(unsigned int wormID);
 
-unsigned int trasnformIDintoPos(unsigned int wormID) {
-	return 0;
+
+unsigned int Stage::trasnformIDintoPos(unsigned int wormID) {
+	if (wormID == myID)
+		return 0;
+	if (wormID == otherID)
+		return 1;
 }
 
-Stage::Stage()
+Stage::Stage(uint32_t myID_, uint32_t otherID_)
 {
-
+	myID = myID_;
+	otherID = otherID_;
 }
 
 

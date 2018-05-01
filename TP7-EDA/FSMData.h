@@ -3,7 +3,7 @@
 #include "Network\Server.h"
 #include "Network\Client.h"
 
-enum event_types { MOVE_FSM, ACK_FSM, QUIT_FSM, IAM_FSM, SEND_FSM, ERROR_FSM };
+enum event_types { MOVE_FSM, ACK_FSM, QUIT_FSM, IAM_FSM,ANS_IAM_FSM, SEND_FSM, ERROR_FSM };
 
 #define MAXTIMEOUT 5
 

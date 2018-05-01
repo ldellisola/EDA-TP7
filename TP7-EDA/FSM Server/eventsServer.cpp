@@ -2,7 +2,11 @@
 #include "..\FSM Client\eventsClient.h"
 
 //intial state.
+
+
 STATE notREADY_s[] = {
+{ ANS_IAM_FSM , waitEVENT_s,notReady_AnswerIAM_s },
+{ SEND_FSM,notREADY_s,failedcom_s },
 { MOVE_FSM,notREADY_s,failedcom_s },
 { ACK_FSM,notREADY_s,failedcom_s },
 { QUIT_FSM,notREADY_s,failedcom_s },
@@ -12,6 +16,8 @@ STATE notREADY_s[] = {
 };
 
 STATE waitEVENT_s[] = {
+{ ANS_IAM_FSM , notREADY_s,failedcom_s },
+{ SEND_FSM,waitACK_s,waitEvent_SendEvent_s },
 { MOVE_FSM,waitEVENT_s,waitEvent_SendEvent_s },
 { ACK_FSM,notREADY_s,failedcom_s },
 { QUIT_FSM,notREADY_s,waitEvent_QuitRecieved_s},
@@ -21,7 +27,9 @@ STATE waitEVENT_s[] = {
 };
 
 STATE waitACK_s[] = {
+{ ANS_IAM_FSM, notREADY_s,failedcom_s },
 { MOVE_FSM,notREADY_s,failedcom_s },
+{ SEND_FSM,notREADY_s,failedcom_s },
 { ACK_FSM,waitEVENT_s,waitAck_AckRecieved_s },
 { QUIT_FSM,notREADY_s, failedcom_s },
 { ERROR,notREADY_s,errorfun_s },
@@ -46,6 +54,14 @@ int8_t TransformEvent_s(Evnt ev) {
 }
 
 
+void notReady_AnswerIAM_s(void * data) {
+	cout << "IAM recieved. Sending ACK" << endl;
+	fsmData * pointer = (fsmData *)data;
+	Packet packet;
+	packet.setPacket(ACKQ_HD, NOTLOADED, 0,NOTLOADED);
+	pointer->client->sendMessage(packet.createACKQ());
+	cout << "ACK sent" << endl;
+}
 
 void notReady_ReadyRecieved_s(void * data)
 {
