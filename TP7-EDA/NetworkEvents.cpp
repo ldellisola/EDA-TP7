@@ -12,8 +12,10 @@ bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 			msg = fsminfo->server->getInfoTimed(TIMEOUT_TIME);
 		else
 			msg = fsminfo->client->getInfoTimed(TIMEOUT_TIME);
-		if (!msg.compare(SERVER_TIMEOUT))
+		if (!msg.compare(SERVER_TIMEOUT)) {
 			fsminfo->timeouts += 1;
+			cout << "Timing out. Number" << fsminfo->timeouts << endl;
+		}
 		else
 			keep = false;
 		if (fsminfo->timeouts == MAXTIMEOUT)
@@ -33,6 +35,10 @@ NetworkEvents::NetworkEvents(uint16_t wormX)
 
 NetworkEvents::~NetworkEvents()
 {
+	if (server)
+		delete server;
+	else if (client)
+		delete client;
 }
 
 bool NetworkEvents::initClient() {
@@ -93,6 +99,7 @@ bool NetworkEvents::initServer() {
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, fsminfo->wormXMine);
 	server->sendMessageTimed(TIMEOUT_TIME,packet.createIAM());
 
+	//cin.get();
 
 	// Espero a que venga un IAM del cliente
 	string msg;
@@ -109,6 +116,7 @@ bool NetworkEvents::initServer() {
 			fsmSE->setEvent(ERROR_FSM);
 
 		do {
+			cout << "FSM Event:" << fsmSE->actualEvent << endl;
 			this->fsmSE->run();
 			// Dentro de la FSM se manda el ultimo ACK y somos todos felices
 		} while (!fsminfo->leave);
@@ -241,7 +249,7 @@ void * NetworkEvents::getEvent(void * data)
 
 
 		if (getInfoWithTimeout(server, msg, fsminfo,false))
-			this->fsmCL->setEvent(ERROR_FSM);
+			this->fsmCL->setEvent(NOEVENT);
 		else {
 			packet.setPacket(msg);
 			this->fsmCL->setEvent(MOVE_FSM);
@@ -270,13 +278,14 @@ void * NetworkEvents::getEvent(void * data)
 	
 
 		if (getInfoWithTimeout(server, msg, fsminfo,true))
-			this->fsmSE->setEvent(ERROR_FSM);
+			this->fsmSE->setEvent(NOEVENT);
 		else {
 			this->fsmSE->setEvent(MOVE_FSM);
 			packet.setPacket(msg);
 			this->retEv = packet.getPacketEvent();
 			*size = 1;
 			fsminfo->ev = packet.getPacketEvent();
+			retEv.activate();
 		}
 
 		do {
@@ -284,6 +293,10 @@ void * NetworkEvents::getEvent(void * data)
 			this->fsmSE->run();
 		} while (!fsminfo->leave);
 
+	}
+	if (retEv.active == false)
+	{
+		*size = 0;
 	}
 
 	return &retEv;

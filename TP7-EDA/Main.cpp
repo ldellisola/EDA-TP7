@@ -14,9 +14,23 @@
 
 #define IPFILE "direcciones.txt"
 
-#define initialWormX 1000
+#define initialWormX 800
 
 #define PORT "15667"
+
+/*
+PROBLEMAS:
+
+	Si tengo el controller de Network, allegro no funciona. (Pasa cada mucho tiempo por la funcion (creo)
+	No asigno wormID al evento.
+	Cuando el server no tiene controller de Network, no tira cancer a la otra computadora.
+	Hay que implementar que se cierre le programa cuando hay un error de networking.
+
+
+
+
+
+*/
 
 
 int main(int argc ,char * argv[]) {
@@ -43,9 +57,9 @@ int main(int argc ,char * argv[]) {
 	void * fsmPointer = NULL;
 
 	if (ips.imServer) {
-		Server server(PORT);
-		networkEvents.loadServer(&server);
-		server.connect();
+		Server * server = new Server(PORT);
+		networkEvents.loadServer(server);
+		server->connect();
 		id1 = WORM_S;
 		id2 = WORM_C;
 		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)networkEvents.getFSMData());
@@ -105,7 +119,7 @@ int main(int argc ,char * argv[]) {
 		// Controllers
 		AllegroEventGetter allegroEvents(allegro.getEventQueue());
 		eventHandler.loadController(&allegroEvents);
-		eventHandler.loadController(&networkEvents);
+		//eventHandler.loadController(&networkEvents);
 		
 
 		// Observers
@@ -131,6 +145,7 @@ int main(int argc ,char * argv[]) {
 
 
 	}
+
 	delete fsmPointer;
 	return 0;
 }
