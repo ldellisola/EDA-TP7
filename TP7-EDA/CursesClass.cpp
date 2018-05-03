@@ -129,3 +129,4 @@ string CursesClass::getString(int posY, int posX, int maxSize)
 
 	return retValue;
 }
+

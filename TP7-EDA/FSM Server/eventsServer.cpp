@@ -70,7 +70,7 @@ void notReady_ReadyRecieved_s(void * data)
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, pointer->wormXMine);
-	pointer->server->sendMessageTimed(TIMEOUT_TIME_, TIME,packet.createIAM());
+	pointer->server->sendMessageTimed(TIMEOUT_TIME_,packet.createIAM());	//Borre un TIME que no estaba definido y creo que estaba de mas
 	cout << "Waiting for ACK" << endl;
 }
 ///OK
