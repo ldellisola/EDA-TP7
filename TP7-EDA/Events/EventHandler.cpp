@@ -64,7 +64,7 @@ void EventHandler::displatchEvent(Ev_t & ev, Stage& stage)
 void EventHandler::HandleEventDispatch(Stage& stage)
 {
 	while (events.size()) {
-		if (events.begin()->Event != TIMER_EV && events.begin()->Event!=NOEVENT) {
+		if (events.begin()->Event != TIMER_EV && events.begin()->Event != NOEVENT) {
 			stage.addEvent(&events.begin());
 		}
 		displatchEvent(*events.begin(), stage);

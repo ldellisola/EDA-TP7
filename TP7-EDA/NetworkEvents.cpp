@@ -1,8 +1,9 @@
 
 #include "Network\NetworkEvents.h"
 
-bool getInfoWithTimeout(void * net,string& msg, fsmData * fsminfo, bool server)
+bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 {
+
 	//server->connect();
 	bool error = false;
 	bool keep = true;
@@ -196,10 +197,10 @@ void NetworkEvents::update(void * data)
 		extEv = *(Ev_t *)data;
 		fsminfo = (fsmData *)this->fsmSE->getData();
 		fsminfo->ev = extEv;
-		this->fsmCL->setEvent(SEND_FSM);
+		this->fsmSE->setEvent(SEND_FSM);
 
 		do {
-			this->fsmCL->run();
+			this->fsmSE->run();
 
 			Packet packet;
 			fsminfo->timeouts = 0;

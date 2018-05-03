@@ -12,6 +12,7 @@ STATE notREADY_c[] = {
 { QUIT_FSM,notREADY_c,failedcom_c },
 { ERROR_FSM,notREADY_c,errorfun_c },
 { IAM_FSM,waitACK_c,notReady_ReadyRecieved_c },
+{ NOEVENT_FSM,notREADY_c,failedcom_c },
 { END,notREADY_c,reset_c },
 };
 // Tendria que ahcer que cuando llega el ACK o cuando Mando un ACK, que salga del loop. Lo mismo si hay un error
@@ -23,6 +24,7 @@ STATE waitEVENT_c[] = {
 { QUIT_FSM,notREADY_c,waitEvent_QuitRecieved_c },
 { ERROR_FSM,notREADY_c,errorfun_c },
 { IAM_FSM, notREADY_c,failedcom_c },
+
 { END,notREADY_c,reset_c },
 };
 
@@ -34,6 +36,7 @@ STATE waitACK_c[] = {
 { QUIT_FSM,notREADY_c, failedcom_c },
 { ERROR_FSM,notREADY_c,errorfun_c },
 {IAM_FSM,notREADY_c,failedcom_c },
+{ NOEVENT_FSM,notREADY_c,failedcom_c },
 { END,notREADY_c,reset_c },
 };
 
@@ -53,6 +56,11 @@ int8_t TransformEvent_c(Evnt ev) {
 	}
 
 }
+
+void waitEvent_NoEvent_c(void*data) {
+	cout << "No Event was Recieved" << endl;
+}
+
 
 void notReady_AnswerIAM_c(void * data) {
 	cout << "IAM recieved. Sending ACK" << endl;

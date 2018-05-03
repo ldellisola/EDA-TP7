@@ -21,7 +21,7 @@ void waitEvent_SendEvent_c(void *data);
 
 void waitEvent_GetEvent_c(void *data);
 
-
+void waitEvent_NoEvent_c(void * data);
 
 void waitEvent_QuitRecieved_c(void *data);
 
