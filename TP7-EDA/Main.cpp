@@ -38,8 +38,8 @@ int main(int argc ,char * argv[]) {
 	
 
 
-	fsmData fsmdata = networkEvents.getFSMData();
-	bool run;
+	//fsmData fsmdata = networkEvents.getFSMData();
+	bool run = false;
 	void * fsmPointer = NULL;
 
 	if (ips.imServer) {
@@ -48,7 +48,7 @@ int main(int argc ,char * argv[]) {
 		server.connect();
 		id1 = WORM_S;
 		id2 = WORM_C;
-		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
+		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)networkEvents.getFSMData());
 		networkEvents.loadFSMServer((fsmS *)fsmPointer);
 		run = networkEvents.initServer();
 
@@ -59,7 +59,7 @@ int main(int argc ,char * argv[]) {
 		client.link();
 		id1 = WORM_C;
 		id2 = WORM_S;
-		fsmPointer = (void *) new fsmC(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
+		fsmPointer = (void *) new fsmC(notREADY_c, waitEVENT_c, waitACK_c, (void *)networkEvents.getFSMData());
 		networkEvents.loadFSMClient((fsmC *)fsmPointer);
 		run = networkEvents.initClient();
 		
@@ -131,6 +131,7 @@ int main(int argc ,char * argv[]) {
 
 
 	}
+	delete fsmPointer;
 	return 0;
 }
 

@@ -155,7 +155,7 @@ void Packet::getBEStringToNum(string a,  uint32_t * number)
 {
 	int8_t * pointer = (int8_t *)number;
 
-	for (int i = 0; i < 4; i--)
+	for (int i = 0; i < 4; i++)
 		pointer[i] = a[4 - i - 1];
 }
 
@@ -178,7 +178,7 @@ string Packet::getNumToBEString(uint32_t * number)
 	int8_t * pointer = (int8_t *)number;
 
 	string ret;
-	for (int i = 4 - 1; i >= 0; i++)
+	for (int i = 4 - 1; i >= 0; i--)
 		ret += pointer[i];
 
 	return ret;
@@ -188,7 +188,7 @@ void Packet::getBEStringToNum(string a, uint16_t * number)
 {
 	int8_t * pointer = (int8_t *)number;
 
-	for (int i = 0; i < 1; i--)
+	for (int i = 0; i <= 1; i++)
 		pointer[i] = a[2 - i - 1];
 }
 
