@@ -90,7 +90,7 @@ bool NetworkEvents::initServer() {
 	// Mando un IAM al cliente
 	Packet packet;
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, fsminfo->wormXMine);
-	client->sendMessage(packet.createIAM());
+	server->sendMessageTimed(TIMEOUT_TIME,packet.createIAM());
 
 
 	// Espero a que venga un IAM del cliente

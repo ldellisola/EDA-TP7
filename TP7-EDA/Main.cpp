@@ -35,32 +35,34 @@ int main(int argc ,char * argv[]) {
 	ips.init(IPFILE);
 	
 	NetworkEvents networkEvents(initialWormX);
-	Client client(ips.getOtherIP(),PORT);
-	networkEvents.loadClient(&client);
-	Server server(PORT);
-	networkEvents.loadServer(&server);
+	
+
 
 	fsmData fsmdata = networkEvents.getFSMData();
 	bool run;
 	void * fsmPointer = NULL;
 
 	if (ips.imServer) {
+		Server server(PORT);
+		networkEvents.loadServer(&server);
 		server.connect();
 		id1 = WORM_S;
 		id2 = WORM_C;
 		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
 		networkEvents.loadFSMServer((fsmS *)fsmPointer);
-		networkEvents.initServer();
-		run = true;
+		run = networkEvents.initServer();
+
 	}
 	else {
+		Client client(ips.getOtherIP(), PORT);
+		networkEvents.loadClient(&client);
 		client.link();
 		id1 = WORM_C;
 		id2 = WORM_S;
 		fsmPointer = (void *) new fsmC(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
 		networkEvents.loadFSMClient((fsmC *)fsmPointer);
-		networkEvents.initClient();
-		run = true;
+		run = networkEvents.initClient();
+		
 	}
 
 
