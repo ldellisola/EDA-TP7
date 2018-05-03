@@ -36,7 +36,7 @@ public:
 	void update(void *data);
 	void * getEvent(void * data);
 
-	fsmData getFSMData();
+	fsmData * getFSMData();
 
 private:
 	Client * client = NULL;

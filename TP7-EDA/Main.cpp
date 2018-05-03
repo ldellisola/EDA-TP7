@@ -14,7 +14,7 @@
 
 #define IPFILE "direcciones.txt"
 
-#define initialWormX 1000
+#define initialWormX 1100
 
 #define PORT "15667"
 
@@ -36,10 +36,7 @@ int main(int argc ,char * argv[]) {
 	
 	NetworkEvents networkEvents(initialWormX);
 	
-
-
-	fsmData fsmdata = networkEvents.getFSMData();
-	bool run;
+	bool run = false;
 	void * fsmPointer = NULL;
 
 	if (ips.imServer) {
@@ -48,7 +45,7 @@ int main(int argc ,char * argv[]) {
 		server.connect();
 		id1 = WORM_S;
 		id2 = WORM_C;
-		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
+		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)networkEvents.getFSMData());
 		networkEvents.loadFSMServer((fsmS *)fsmPointer);
 		run = networkEvents.initServer();
 
@@ -59,7 +56,7 @@ int main(int argc ,char * argv[]) {
 		client.link();
 		id1 = WORM_C;
 		id2 = WORM_S;
-		fsmPointer = (void *) new fsmC(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
+		fsmPointer = (void *) new fsmC(notREADY_c, waitEVENT_c, waitACK_c, (void *)networkEvents.getFSMData());
 		networkEvents.loadFSMClient((fsmC *)fsmPointer);
 		run = networkEvents.initClient();
 		
@@ -68,7 +65,7 @@ int main(int argc ,char * argv[]) {
 
 
 	
-	AllegroClass allegro(1920, 696, 50);
+	
 	//switch (selectmode(allegro.getEventQueue())) {
 	//case SERVER:
 
@@ -96,6 +93,7 @@ int main(int argc ,char * argv[]) {
 
 	if (run)	//Agrego condicional en caso de se salga de la pantalla de inicio, no se haga nada
 	{
+		AllegroClass allegro(1920, 696, 50);
 		
 		EventHandler eventHandler;
 		Stage stage(id1, id2);
@@ -131,6 +129,8 @@ int main(int argc ,char * argv[]) {
 
 
 	}
+
+	delete fsmPointer;
 	return 0;
 }
 
