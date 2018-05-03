@@ -21,7 +21,7 @@ void Packet::clear()
 
 }
 
-void Packet::setPacket(int8_t type, int8_t action_ , int32_t wormID_ , int16_t wormX_ ){
+void Packet::setPacket(int8_t type, int8_t action_ , uint32_t wormID_ , uint16_t wormX_ ){
 	clear();
 
 	switch (type) {
@@ -127,7 +127,7 @@ string Packet::createERROR()
 	return retValue;
 }
 
-int32_t Packet::getWormID()
+uint32_t Packet::getWormID()
 {
 	return wormID;
 }
@@ -146,12 +146,12 @@ Ev_t Packet::getPacketEvent()
 	return retValue;
 }
 
-int16_t Packet::getWormX()
+uint16_t Packet::getWormX()
 {
 	return wormX;
 }
 
-void Packet::getBEStringToNum(string a,  int32_t * number)
+void Packet::getBEStringToNum(string a,  uint32_t * number)
 {
 	int8_t * pointer = (int8_t *)number;
 
@@ -173,7 +173,7 @@ Evnt Packet::transformActionToEvent()
 	}
 }
 
-string Packet::getNumToBEString(int32_t * number)
+string Packet::getNumToBEString(uint32_t * number)
 {
 	int8_t * pointer = (int8_t *)number;
 
@@ -184,7 +184,7 @@ string Packet::getNumToBEString(int32_t * number)
 	return ret;
 }
 
-void Packet::getBEStringToNum(string a, int16_t * number)
+void Packet::getBEStringToNum(string a, uint16_t * number)
 {
 	int8_t * pointer = (int8_t *)number;
 
@@ -192,12 +192,12 @@ void Packet::getBEStringToNum(string a, int16_t * number)
 		pointer[i] = a[2 - i - 1];
 }
 
-string Packet::getNumToBEString(int16_t * number)
+string Packet::getNumToBEString(uint16_t * number)
 {
-	int8_t * pointer = (int8_t *)number;
+	uint8_t * pointer = (uint8_t *)number;
 
 	string ret;
-	for (int i = 2 - 1; i >= 0; i++)
+	for (int i = 2 - 1; i >= 0; i--)
 		ret += pointer[i];
 
 	return ret;

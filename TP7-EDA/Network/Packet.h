@@ -12,7 +12,7 @@ using namespace std;
 #define ERROR_HD (0xE0)
 
 #define IDSIZE (4)
-#define NOTLOADED (-1)
+#define NOTLOADED (-1)	// Ya se quu va a ir a una variable positiva, pero esto me va a dar un valor muy alto que me sirve como base
 
 
 class Packet
@@ -21,7 +21,7 @@ public:
 	Packet();
 	~Packet();
 	void clear();
-	void setPacket(int8_t type, int8_t action_ = NOTLOADED, int32_t wormID_ = NOTLOADED, int16_t wormX_ = NOTLOADED);
+	void setPacket(int8_t type, int8_t action_ = NOTLOADED, uint32_t wormID_ = NOTLOADED, uint16_t wormX_ = NOTLOADED);
 	void setPacket(string packet);
 	bool isPacketClear();
 	string createIAM();
@@ -30,19 +30,19 @@ public:
 	string createQUIT();
 	string createMOVE();
 	string createERROR();
-	int32_t getWormID();
+	uint32_t getWormID();
 	int8_t getHeader();
 	Ev_t getPacketEvent();
-	int16_t getWormX();
+	uint16_t getWormX();
 
 private:
 	Evnt transformActionToEvent();
-	string getNumToBEString(int32_t * number);
-	string getNumToBEString(int16_t * number);
-	void getBEStringToNum(string a, int32_t * number);
-	void getBEStringToNum(string a, int16_t * number);
-	int32_t wormID = NOTLOADED;
-	int16_t wormX = NOTLOADED;
+	string getNumToBEString(uint32_t * number);
+	string getNumToBEString(uint16_t * number);
+	void getBEStringToNum(string a, uint32_t * number);
+	void getBEStringToNum(string a, uint16_t * number);
+	uint32_t wormID = NOTLOADED;
+	uint16_t wormX = NOTLOADED;
 	int8_t header = NOTLOADED;
 	int8_t action = NOTLOADED;
 	

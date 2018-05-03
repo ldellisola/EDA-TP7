@@ -169,6 +169,7 @@
     <ClCompile Include="Network\Sever.cpp" />
     <ClCompile Include="Observers\drawStage.cpp" />
     <ClCompile Include="Observers\Observer.cpp" />
+    <ClCompile Include="Parser\Parser.cpp" />
     <ClCompile Include="UserHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -188,11 +189,13 @@
     <ClInclude Include="Game\Stage.h" />
     <ClInclude Include="Game\Worm.h" />
     <ClInclude Include="Network\Client.h" />
+    <ClInclude Include="Network\IPData.h" />
     <ClInclude Include="Network\NetworkEvents.h" />
     <ClInclude Include="Network\Packet.h" />
     <ClInclude Include="Network\Server.h" />
     <ClInclude Include="Observers\drawStage.h" />
     <ClInclude Include="Observers\Observer.h" />
+    <ClInclude Include="Parser\Parser.h" />
     <ClInclude Include="UserHandler.h" />
   </ItemGroup>
   <ItemGroup>

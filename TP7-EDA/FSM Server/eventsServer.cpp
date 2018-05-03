@@ -2,6 +2,7 @@
 #include "..\FSM Client\eventsClient.h"
 
 //intial state.
+#define TIMEOUT_TIME (20)
 
 
 STATE notREADY_s[] = {
@@ -59,7 +60,7 @@ void notReady_AnswerIAM_s(void * data) {
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(ACKQ_HD, NOTLOADED, 0,NOTLOADED);
-	pointer->client->sendMessage(packet.createACKQ());
+	pointer->server->sendMessageTimed(TIMEOUT_TIME,packet.createACKQ());
 	cout << "ACK sent" << endl;
 }
 
@@ -69,7 +70,7 @@ void notReady_ReadyRecieved_s(void * data)
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, pointer->wormXMine);
-	pointer->client->sendMessage(packet.createIAM());
+	pointer->server->sendMessageTimed(TIMEOUT_TIME,packet.createIAM());
 	cout << "Waiting for ACK" << endl;
 }
 ///OK
@@ -81,7 +82,7 @@ void waitEvent_SendEvent_s(void * data)
 	packet.setPacket(MOVE_FSM, TransformEvent_s((pointer->ev.Event)), pointer->ev.wormID);
 	string msg = packet.createMOVE();
 	// Asumo que  el paquete siempre se envia bien y tarda en recibirlo // NO ES BLOQUEANTE
-	pointer->client->sendMessage(msg);
+	pointer->server->sendMessageTimed(TIMEOUT_TIME,msg);
 	cout << "Local event sent" << endl;
 }
 ///OK
@@ -89,10 +90,12 @@ void waitEvent_GetEvent_s(void * data)
 {
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
+
 	cout << "Event received. Sending ACK" << endl;
 	packet.setPacket(ACK_HD, NOTLOADED, pointer->ev.wormID);
-	pointer->client->sendMessage(packet.createACK());
+	pointer->server->sendMessageTimed(TIMEOUT_TIME,packet.createACK());
 	cout << "ACK sent. Leaving FSM" << endl;
+
 	pointer->leave = true;
 	pointer->exitProgram = false;
 
@@ -104,7 +107,7 @@ void waitEvent_QuitRecieved_s(void * data)
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	cout << "Quit Recieved. Answering ACK and leaving the program." << endl;
-	pointer->client->sendMessage(packet.createACKQ());
+	pointer->server->sendMessageTimed(TIMEOUT_TIME,packet.createACKQ());
 	pointer->leave = true;
 	pointer->exitProgram = true;
 }

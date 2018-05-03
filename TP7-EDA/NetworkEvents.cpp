@@ -1,12 +1,16 @@
 
 #include "Network\NetworkEvents.h"
 
-bool getInfoWithTimeout(Server * server,string& msg, fsmData * fsminfo)
+bool getInfoWithTimeout(void * net,string& msg, fsmData * fsminfo, bool server)
 {
+	//server->connect();
 	bool error = false;
 	bool keep = true;
 	while (keep && !error) {
-		msg = server->getInfoTimed(20);
+		if (server)
+			msg = ((Server *)net)->getInfoTimed(20);
+		else
+			msg = ((Client *)net)->getInfoTimed(20);
 		if (!msg.compare(SERVER_TIMEOUT))
 			fsminfo->timeouts += 1;
 		else
@@ -14,10 +18,11 @@ bool getInfoWithTimeout(Server * server,string& msg, fsmData * fsminfo)
 		if (fsminfo->timeouts == MAXTIMEOUT)
 			error = true;
 	}
+	//server->stop();
 	return error;
 }
 
-NetworkEvents::NetworkEvents(int16_t wormX)
+NetworkEvents::NetworkEvents(uint16_t wormX)
 {
 	Ev_t extEv;
 	infoForFsm = { extEv,0,false,false,wormX,0 ,NULL,NULL };
@@ -39,7 +44,7 @@ bool NetworkEvents::initClient() {
 	fsminfo->timeouts = 0;
 	string msg;
 
-	if (getInfoWithTimeout(server, msg, fsminfo))
+	if (getInfoWithTimeout(server, msg, fsminfo,false))
 		this->fsmCL->setEvent(ERROR_FSM);
 	else {
 		packet.setPacket(msg);
@@ -58,7 +63,7 @@ bool NetworkEvents::initClient() {
 		fsminfo->timeouts = 0;
 		string msg;
 
-		if (getInfoWithTimeout(server, msg, fsminfo))
+		if (getInfoWithTimeout(server, msg, fsminfo,false))
 			this->fsmCL->setEvent(ERROR_FSM);
 		else {
 			packet.setPacket(msg);
@@ -78,7 +83,7 @@ bool NetworkEvents::initClient() {
 
 bool NetworkEvents::initServer() {
 	bool success = false;
-	fsmData * fsminfo = NULL; // ESTO ME TIRA EXCEPTION PERO SI NO LO INICALIZO NO COMPILA
+	fsmData * fsminfo = &this->infoForFsm; // ESTO ME TIRA EXCEPTION PERO SI NO LO INICALIZO NO COMPILA
 
 	// PASOS:
 
@@ -87,9 +92,10 @@ bool NetworkEvents::initServer() {
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, fsminfo->wormXMine);
 	client->sendMessage(packet.createIAM());
 
+
 	// Espero a que venga un IAM del cliente
 	string msg;
-	if (getInfoWithTimeout(server, msg, fsminfo))
+	if (getInfoWithTimeout(server, msg, fsminfo,true))
 		this->fsmSE->setEvent(ERROR_FSM);
 	else {
 		packet.setPacket(msg);
@@ -144,10 +150,19 @@ void NetworkEvents::loadFSMServer(fsmS * server)
 void NetworkEvents::update(void * data)
 {
 	Ev_t extEv;
+	Stage * st = NULL;
+	bool great = false;
+	if (data != NULL) {
+		st = (Stage *)data;
+		if (st->getEvetn() != NULL) {
+			extEv = *(Ev_t *)st->getEvetn();
+			great = true;
+		}
+	}
 	fsmData * fsminfo;
 
-	if (fsmClient && data!= NULL) {
-		extEv = *(Ev_t *)data;
+	if (fsmClient && data!= NULL &&great) {
+		//extEv = *(Ev_t *)data;
 
 		fsminfo = (fsmData *)this->fsmCL->getData();
 		fsminfo->ev = extEv;
@@ -161,7 +176,7 @@ void NetworkEvents::update(void * data)
 			string msg;
 
 
-			if (getInfoWithTimeout(server, msg, fsminfo))
+			if (getInfoWithTimeout(server, msg, fsminfo,false))
 				this->fsmCL->setEvent(ERROR_FSM);
 			else {
 				packet.setPacket(msg);
@@ -177,7 +192,7 @@ void NetworkEvents::update(void * data)
 
 
 	}
-	else if (fsmServer && data != NULL) {
+	else if (fsmServer && data != NULL && great) {
 		extEv = *(Ev_t *)data;
 		fsminfo = (fsmData *)this->fsmSE->getData();
 		fsminfo->ev = extEv;
@@ -190,7 +205,7 @@ void NetworkEvents::update(void * data)
 			fsminfo->timeouts = 0;
 			string msg;
 
-			if (getInfoWithTimeout(server, msg, fsminfo))
+			if (getInfoWithTimeout(server, msg, fsminfo,true))
 				this->fsmSE->setEvent(ERROR_FSM);
 			else {
 				this->fsmSE->setEvent(ACK_FSM);
@@ -224,7 +239,7 @@ void * NetworkEvents::getEvent(void * data)
 		string msg;
 
 
-		if (getInfoWithTimeout(server, msg, fsminfo))
+		if (getInfoWithTimeout(server, msg, fsminfo,false))
 			this->fsmCL->setEvent(ERROR_FSM);
 		else {
 			packet.setPacket(msg);
@@ -253,7 +268,7 @@ void * NetworkEvents::getEvent(void * data)
 		string msg;
 	
 
-		if (getInfoWithTimeout(server, msg, fsminfo))
+		if (getInfoWithTimeout(server, msg, fsminfo,true))
 			this->fsmSE->setEvent(ERROR_FSM);
 		else {
 			this->fsmSE->setEvent(MOVE_FSM);

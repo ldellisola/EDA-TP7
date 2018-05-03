@@ -2,23 +2,28 @@
 
 
 using namespace boost::asio;
-Client::Client()
+Client::Client(string ip, const char * port_)
 {
 	this->IOHandler = new io_service();
 	this->clientSocket = new ip::tcp::socket(*IOHandler);
 	this->clientResolver = new ip::tcp::resolver(*IOHandler);
+
+	ipToConect = ip;
+	port = port_;
 }
 
 //using namespace boost::asio;
-void Client::link(const char * host, const char * port)
+void Client::link()
 {
-	auto q = ip::tcp::resolver::query(host, port);
+
+	auto q = ip::tcp::resolver::query(ipToConect.c_str(), this->port);
 	this->endpoint = clientResolver->resolve(q);
-	clientSocket->non_blocking(true);
+	
 	connect(*clientSocket, endpoint);
+	clientSocket->non_blocking(true);
 	
 
-	cout << "Client trying to connect to " << host << endl;
+	cout << "Client trying to connect to " << ipToConect.c_str() << endl;
 }
 
 void Client::sendMessage(string msg)
@@ -54,6 +59,41 @@ bool Client::sendMessageTimed(string msg, int ms)
 	} while (error && !timeout);
 
 	return !timeout;
+}
+
+string Client::getInfoTimed(int ms)
+{
+	Timer timer;
+
+
+
+	char buffer[1 + 255 + 1];
+	size_t lenght = 0;
+	boost::system::error_code error;
+
+	timer.start();
+
+	bool timeout = false;
+
+	do {
+		lenght = this->clientSocket->read_some(boost::asio::buffer(buffer), error);
+		timer.stop();
+		if (timer.getTime() > ms && lenght == 0) { // Pido que lenght == 0 asi no lo paro mientras esta mandando
+			timeout = true;
+		}
+
+	} while (error && !timeout);
+	std::string retValue;
+
+	if (!timeout) {
+		buffer[lenght] = 0;
+		retValue = buffer;
+		std::cout << "Recieved a message" << std::endl;
+	}
+	else
+		retValue = CLIENT_TIMEOUT;
+
+	return retValue;
 }
 
 Client::~Client()

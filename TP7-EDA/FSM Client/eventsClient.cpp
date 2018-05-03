@@ -57,9 +57,11 @@ int8_t TransformEvent_c(Evnt ev) {
 void notReady_AnswerIAM_c(void * data) {
 	cout << "IAM recieved. Sending ACK" << endl;
 	fsmData * pointer = (fsmData *)data;
+	//pointer->client->link();
 	Packet packet;
 	packet.setPacket(ACKQ_HD, NOTLOADED, 0, NOTLOADED);
 	pointer->client->sendMessage(packet.createACKQ());
+	//pointer->client->stop();
 	cout << "ACK sent" << endl;
 }
 
@@ -68,21 +70,25 @@ void notReady_ReadyRecieved_c(void * data)
 {
 	cout << "IAM recieved. Answering Handshake" << endl;
 	fsmData * pointer = (fsmData *)data;
+	//pointer->client->link();
 	Packet packet;
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, pointer->wormXMine);
 	pointer->client->sendMessage(packet.createIAM());
+	//pointer->client->stop();
 	cout << "Waiting for ACK" << endl;
 }
 ///OK
 void waitEvent_SendEvent_c(void * data)
 {// Tengo que mandar el evento que me llego. Lo tengo en el puntero data.
 	fsmData * pointer = (fsmData *)data;
+	//pointer->client->link();
 	Packet packet;
 	cout << "Sending local event to network. Waiting for ACK" << endl;
 	packet.setPacket(MOVE_FSM, TransformEvent_c((pointer->ev.Event)), pointer->ev.wormID);
 	string msg = packet.createMOVE();
 	// Asumo que  el paquete siempre se envia bien y tarda en recibirlo // NO ES BLOQUEANTE
 	pointer->client->sendMessage(msg);
+	//pointer->client->stop();
 	cout << "Local event sent" << endl;
 }
 ///OK
@@ -90,9 +96,11 @@ void waitEvent_GetEvent_c(void * data)
 {
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
+	//pointer->client->link();
 	cout << "Event received. Sending ACK" << endl;
 	packet.setPacket(ACK_HD, NOTLOADED, pointer->ev.wormID);
 	pointer->client->sendMessage(packet.createACK());
+	//pointer->client->stop();
 	cout << "ACK sent. Leaving FSM" << endl;
 	pointer->leave = true;
 	pointer->exitProgram = false;
@@ -104,8 +112,10 @@ void waitEvent_QuitRecieved_c(void * data)
 {
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
+	//pointer->client->link();
 	cout << "Quit Recieved. Answering ACK and leaving the program." << endl;
 	pointer->client->sendMessage(packet.createACKQ());
+	//pointer->client->stop();
 	pointer->leave = true;
 	pointer->exitProgram = true;
 }

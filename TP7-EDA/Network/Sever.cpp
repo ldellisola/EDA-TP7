@@ -23,9 +23,9 @@ Server::~Server() {
 void Server::connect() {
 
 	std::cout << "Waiting for somebody to connect.. :( " << std::endl;
-	serverSocket->non_blocking(true);
+	
 	this->serverAcceptor->accept(*(this->serverSocket));
-
+	serverSocket->non_blocking(true);
 }
 
 std::string Server::getInfo() {
@@ -78,4 +78,31 @@ std::string Server::getInfoTimed(int ms)
 		retValue = SERVER_TIMEOUT;
 
 	return retValue;
+}
+
+void Server::sendMessageTimed(int ms, string msg)
+{
+	Timer timer;
+
+	size_t lenght = 0;
+	boost::system::error_code error;
+
+	timer.start();
+
+	bool timeout = false;
+
+	do {
+		lenght = this->serverSocket->write_some(boost::asio::buffer(msg), error);
+		timer.stop();
+		if (timer.getTime() > ms && lenght == 0) { // Pido que lenght == 0 asi no lo paro mientras esta mandando
+			timeout = true;
+		}
+
+	} while (error && !timeout);
+
+	if (!timeout) {
+		std::cout << "Server sent message:" << msg << std::endl;
+	}
+	else
+		std::cout << "ERROR: connection timed out" << msg << std::endl;
 }

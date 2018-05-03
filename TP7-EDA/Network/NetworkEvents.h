@@ -5,6 +5,7 @@
 #include "../FSM Server/fsmServer.h"
 #include"../Observers/Observer.h"
 #include"../Controllers/Controller.h"
+#include "../Game/Stage.h"
 
 /*
 	No me gusta la implementacion de la FSM de networking y aca me suena a que hay algo raro, ya que paso como maximo dos veces por la FSM cuando quiero
@@ -18,7 +19,7 @@
 class NetworkEvents : public Observer, public Controller
 {
 public:
-	NetworkEvents(int16_t wormX);
+	NetworkEvents(uint16_t wormX);
 	~NetworkEvents();
 
 	void loadServer(Server * server);

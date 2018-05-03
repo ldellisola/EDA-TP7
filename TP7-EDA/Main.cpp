@@ -6,10 +6,13 @@
 #include "Controllers\AllegroEventGetter.h"
 #include "Observers\drawStage.h"
 #include "Network\NetworkEvents.h"
-
+#include "Network\IPData.h"
+#include "Parser\Parser.h"
 
 #define WORM_S (12345)
 #define WORM_C (67890)
+
+#define IPFILE "direcciones.txt"
 
 #define initialWormX 1000
 
@@ -19,12 +22,20 @@
 int main(int argc ,char * argv[]) {
 	// Pregunto si soy server o CLient
 
-	CursesClass *curses = new CursesClass;
+	Parser parser;
+	parser.Read(argc, argv);
+
+	
 	uint32_t id1;
 	uint32_t id2;
+
+	IPData ips;
+	ips.ip = parser.myIP;
+	ips.imServer = parser.initialMachine;
+	ips.init(IPFILE);
 	
 	NetworkEvents networkEvents(initialWormX);
-	Client client;
+	Client client(ips.getOtherIP(),PORT);
 	networkEvents.loadClient(&client);
 	Server server(PORT);
 	networkEvents.loadServer(&server);
@@ -32,35 +43,58 @@ int main(int argc ,char * argv[]) {
 	fsmData fsmdata = networkEvents.getFSMData();
 	bool run;
 	void * fsmPointer = NULL;
-	AllegroClass allegro(1920, 696, 50);
-	
-	switch (selectmode(allegro.getEventQueue())) {
-	case SERVER:
 
-
+	if (ips.imServer) {
+		server.connect();
 		id1 = WORM_S;
 		id2 = WORM_C;
-		fsmPointer= (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s,(void *)&fsmdata);
+		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
 		networkEvents.loadFSMServer((fsmS *)fsmPointer);
 		networkEvents.initServer();
 		run = true;
-		break;
-	case CLIENT:
-		id2 = WORM_S;
+	}
+	else {
+		client.link();
 		id1 = WORM_C;
+		id2 = WORM_S;
 		fsmPointer = (void *) new fsmC(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
 		networkEvents.loadFSMClient((fsmC *)fsmPointer);
 		networkEvents.initClient();
 		run = true;
-		break;
-	case LEAVE:
-		run = false;
-		break;
 	}
-	delete curses;
+
+
+
+	
+	AllegroClass allegro(1920, 696, 50);
+	//switch (selectmode(allegro.getEventQueue())) {
+	//case SERVER:
+
+
+	//	id1 = WORM_S;
+	//	id2 = WORM_C;
+	//	fsmPointer= (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s,(void *)&fsmdata);
+	//	networkEvents.loadFSMServer((fsmS *)fsmPointer);
+	//	networkEvents.initServer();
+	//	run = true;
+	//	break;
+	//case CLIENT:
+	//	id2 = WORM_S;
+	//	id1 = WORM_C;
+	//	fsmPointer = (void *) new fsmC(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
+	//	networkEvents.loadFSMClient((fsmC *)fsmPointer);
+	//	networkEvents.initClient();
+	//	run = true;
+	//	break;
+	//case LEAVE:
+	//	run = false;
+	//	break;
+	//}
+
 
 	if (run)	//Agrego condicional en caso de se salga de la pantalla de inicio, no se haga nada
 	{
+		
 		EventHandler eventHandler;
 		Stage stage(id1, id2);
 
@@ -69,20 +103,21 @@ int main(int argc ,char * argv[]) {
 		// Controllers
 		AllegroEventGetter allegroEvents(allegro.getEventQueue());
 		eventHandler.loadController(&allegroEvents);
-		// Falta network controller
-		// Hay que cargar el controller de network
+		eventHandler.loadController(&networkEvents);
+		
 
 		// Observers
 		DrawStage drawStage(JUMPFILE, JUMPPICS, WALKFILE, WALKPICS, BACKGROUNDFILE, STAGEFILE);
 		stage.addObserver(&drawStage);
-		// Falta el observer de network y cargarlo 
+		stage.addObserver(&networkEvents);
+		
 
 		// Worms
 		WormData wormData;
 		Worm worm1(&wormData, id1);
 		stage.createWorms(&worm1);
-		//Worm worm2(&wormData);
-		//stage.createWorms(&worm2,id2); Lo descomento cuadno tenga networking
+		Worm worm2(&wormData,id2);
+		stage.createWorms(&worm2); 
 
 		bool quit = false;
 

@@ -23,8 +23,8 @@ typedef struct fsmData {
 	unsigned int timeouts = 0;
 	bool leave = false;
 	bool error = false;
-	int16_t wormXMine;
-	int16_t wormXOther;
+	uint16_t wormXMine;
+	uint16_t wormXOther;
 	Client *client;
 	Server * server;
 	bool exitProgram = false;

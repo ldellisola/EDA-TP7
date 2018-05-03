@@ -7,14 +7,17 @@
 #include <iostream>
 
 #define SERVER_TIMEOUT "timeout"
+using namespace std;
 
 class Server {
 public:
 	Server(std::string port);
 	~Server();
 	void connect();
-	std::string getInfo();
-	std::string getInfoTimed(int ms);
+	string getInfo();
+	string getInfoTimed(int ms);
+	void sendMessageTimed(int ms, string msg);
+
 
 private:
 	boost::asio::io_service* IO_handler;

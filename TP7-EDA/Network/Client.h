@@ -10,17 +10,22 @@
 using namespace std;
 using namespace boost::asio;
 
+#define CLIENT_TIMEOUT "timeout"
+
 class Client
 {
 public:
-	Client();
-	void link(const char * host, const char * port);
+	Client(string ip, const char * port_);
+	void link();
 	//string recieveMessage();
 	void sendMessage(string msg);
 	bool sendMessageTimed(string msg, int ms);
+	string getInfoTimed(int ms);
+
 	~Client();
 private:
-	
+	string ipToConect;
+	const char * port;
 	io_service* IOHandler;
 	ip::tcp::socket* clientSocket;
 	ip::tcp::resolver* clientResolver;

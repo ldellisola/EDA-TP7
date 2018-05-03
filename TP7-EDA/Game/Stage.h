@@ -21,6 +21,9 @@ public:
 
 	void addObserver(Observer * obs);
 
+	void addEvent(void * ev);
+	void * getEvetn();
+
 	void wormMoveLeft(unsigned int wormID);
 	void wormMoveRight(unsigned int wormID);
 	void wormJump(unsigned int wormID);
@@ -39,6 +42,7 @@ private:
 	vector<Worm> worms;
 	vector<Observer *> observers;
 	ActionType lastAction;
+	void * event = NULL;
 	void update();
 	bool leave = false;
 };
