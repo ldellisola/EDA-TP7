@@ -2,7 +2,7 @@
 #include "..\FSM Client\eventsClient.h"
 
 //intial state.
-#define TIMEOUT_TIME (20)
+
 
 
 STATE notREADY_s[] = {
@@ -60,7 +60,7 @@ void notReady_AnswerIAM_s(void * data) {
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(ACKQ_HD, NOTLOADED, 0,NOTLOADED);
-	pointer->server->sendMessageTimed(TIMEOUT_TIME,packet.createACKQ());
+	pointer->server->sendMessageTimed(TIMEOUT_TIME_,packet.createACKQ());
 	cout << "ACK sent" << endl;
 }
 
@@ -70,7 +70,7 @@ void notReady_ReadyRecieved_s(void * data)
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, pointer->wormXMine);
-	pointer->server->sendMessageTimed(TIMEOUT_TIME,packet.createIAM());
+	pointer->server->sendMessageTimed(TIMEOUT_TIME_, TIME,packet.createIAM());
 	cout << "Waiting for ACK" << endl;
 }
 ///OK
@@ -82,7 +82,7 @@ void waitEvent_SendEvent_s(void * data)
 	packet.setPacket(MOVE_FSM, TransformEvent_s((pointer->ev.Event)), pointer->ev.wormID);
 	string msg = packet.createMOVE();
 	// Asumo que  el paquete siempre se envia bien y tarda en recibirlo // NO ES BLOQUEANTE
-	pointer->server->sendMessageTimed(TIMEOUT_TIME,msg);
+	pointer->server->sendMessageTimed(TIMEOUT_TIME_,msg);
 	cout << "Local event sent" << endl;
 }
 ///OK
@@ -93,7 +93,7 @@ void waitEvent_GetEvent_s(void * data)
 
 	cout << "Event received. Sending ACK" << endl;
 	packet.setPacket(ACK_HD, NOTLOADED, pointer->ev.wormID);
-	pointer->server->sendMessageTimed(TIMEOUT_TIME,packet.createACK());
+	pointer->server->sendMessageTimed(TIMEOUT_TIME_, packet.createACK());
 	cout << "ACK sent. Leaving FSM" << endl;
 
 	pointer->leave = true;
@@ -107,7 +107,7 @@ void waitEvent_QuitRecieved_s(void * data)
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	cout << "Quit Recieved. Answering ACK and leaving the program." << endl;
-	pointer->server->sendMessageTimed(TIMEOUT_TIME,packet.createACKQ());
+	pointer->server->sendMessageTimed(TIMEOUT_TIME_, packet.createACKQ());
 	pointer->leave = true;
 	pointer->exitProgram = true;
 }

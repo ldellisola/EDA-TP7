@@ -15,6 +15,8 @@
 
 */
 
+#define TIMEOUT_TIME (100) // en ms
+
 
 class NetworkEvents : public Observer, public Controller
 {

@@ -8,9 +8,9 @@ bool getInfoWithTimeout(void * net,string& msg, fsmData * fsminfo, bool server)
 	bool keep = true;
 	while (keep && !error) {
 		if (server)
-			msg = ((Server *)net)->getInfoTimed(20);
+			msg = ((Server *)net)->getInfoTimed(TIMEOUT_TIME);
 		else
-			msg = ((Client *)net)->getInfoTimed(20);
+			msg = ((Client *)net)->getInfoTimed(TIMEOUT_TIME);
 		if (!msg.compare(SERVER_TIMEOUT))
 			fsminfo->timeouts += 1;
 		else
