@@ -45,6 +45,27 @@ std::string Server::getInfo() {
 	return retValue;
 }
 
+bool Server::getInfoSigle(string & msg)
+{
+	bool returnError= true;
+
+	char buffer[1 + 255 + 1];
+	size_t lenght = 0;
+	boost::system::error_code error;
+
+	lenght = this->serverSocket->read_some(boost::asio::buffer(buffer), error);
+
+	if (!error) {
+		buffer[lenght] = 0;
+		msg = buffer;
+		returnError = false;
+		cout << "Message Recieved" << endl;
+	}
+
+
+	return returnError;
+}
+
 std::string Server::getInfoTimed(int ms)
 {
 	Timer timer;

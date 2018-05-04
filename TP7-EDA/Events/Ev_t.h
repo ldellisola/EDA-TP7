@@ -29,8 +29,7 @@ typedef struct {
 	void deactivate() {
 		active = false;
 		lastEv = Event;
-		
-
+		wormID = 0;
 	}
 	void newTimer() {
 		time = new Timer();

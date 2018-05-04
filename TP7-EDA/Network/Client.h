@@ -22,6 +22,8 @@ public:
 	bool sendMessageTimed(string msg, int ms);
 	string getInfoTimed(int ms);
 
+	bool getInfoSigle(string & msg);
+
 	~Client();
 private:
 	string ipToConect;

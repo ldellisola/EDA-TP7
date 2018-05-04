@@ -96,6 +96,27 @@ string Client::getInfoTimed(int ms)
 	return retValue;
 }
 
+bool Client::getInfoSigle(string & msg)
+{
+	bool returnError = true;
+
+	char buffer[1 + 255 + 1];
+	size_t lenght = 0;
+	boost::system::error_code error;
+
+	lenght = this->clientSocket->read_some(boost::asio::buffer(buffer), error);
+
+	if (!error) {
+		buffer[lenght] = 0;
+		msg = buffer;
+		returnError = false;
+		cout << "Message Recieved" << endl;
+	}
+
+
+	return returnError;
+}
+
 Client::~Client()
 {
 	std::cout << "Closing connection" << std::endl;

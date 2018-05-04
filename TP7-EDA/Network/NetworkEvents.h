@@ -36,6 +36,8 @@ public:
 	void update(void *data);
 	void * getEvent(void * data);
 
+	void loadWormID(uint32_t wormID);
+
 	fsmData * getFSMData();
 
 private:
@@ -50,6 +52,8 @@ private:
 
 	Ev_t retEv;
 	fsmData infoForFsm;
+
+	uint32_t wormID;
 
 
 };

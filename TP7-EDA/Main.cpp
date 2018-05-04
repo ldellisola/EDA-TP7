@@ -22,8 +22,20 @@
 PROBLEMAS:
 
 	Si tengo el controller de Network, allegro no funciona. (Pasa cada mucho tiempo por la funcion (creo)
+	/// Cambie la forma en la que obtenemos informacion. Ahora no hay timeout cuando uso la funcion getEvent
+
+
+
+
 	No asigno wormID al evento.
+	// Ya lo implemente para Networking y Allegro.
+
+
+
 	Cuando el server no tiene controller de Network, no tira cancer a la otra computadora.
+	
+
+
 	Hay que implementar que se cierre le programa cuando hay un error de networking.
 
 
@@ -114,12 +126,12 @@ int main(int argc ,char * argv[]) {
 		EventHandler eventHandler;
 		Stage stage(id1, id2);
 
-
-
 		// Controllers
 		AllegroEventGetter allegroEvents(allegro.getEventQueue());
+		allegroEvents.loadWormID(id1);
 		eventHandler.loadController(&allegroEvents);
-		//eventHandler.loadController(&networkEvents);
+		networkEvents.loadWormID(id2);
+		eventHandler.loadController(&networkEvents);
 		
 
 		// Observers

@@ -25,6 +25,17 @@ bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 	return error;
 }
 
+bool getInfoOneTry(string&msg, fsmData * fsminfo, bool server) {
+
+	bool error;
+	if (server)
+		error = fsminfo->server->getInfoSigle(msg);
+	else
+		error = fsminfo->client->getInfoSigle(msg);
+
+	return error;
+}
+
 NetworkEvents::NetworkEvents(uint16_t wormX)
 {
 	Ev_t extEv;
@@ -248,8 +259,8 @@ void * NetworkEvents::getEvent(void * data)
 		string msg;
 
 
-		if (getInfoWithTimeout(server, msg, fsminfo,false))
-			this->fsmCL->setEvent(NOEVENT);
+		if (getInfoOneTry( msg, fsminfo,false))
+			this->fsmCL->setEvent(NOEVENT_FSM);
 		else {
 			packet.setPacket(msg);
 			this->fsmCL->setEvent(MOVE_FSM);
@@ -277,8 +288,8 @@ void * NetworkEvents::getEvent(void * data)
 		string msg;
 	
 
-		if (getInfoWithTimeout(server, msg, fsminfo,true))
-			this->fsmSE->setEvent(NOEVENT);
+		if (getInfoOneTry(msg, fsminfo, false))
+			this->fsmSE->setEvent(NOEVENT_FSM);
 		else {
 			this->fsmSE->setEvent(MOVE_FSM);
 			packet.setPacket(msg);
@@ -286,6 +297,7 @@ void * NetworkEvents::getEvent(void * data)
 			*size = 1;
 			fsminfo->ev = packet.getPacketEvent();
 			retEv.activate();
+			retEv.wormID = this->wormID;
 		}
 
 		do {
@@ -294,13 +306,17 @@ void * NetworkEvents::getEvent(void * data)
 		} while (!fsminfo->leave);
 
 	}
-	if (retEv.active == false)
-	{
+	if (!retEv.active) {
 		*size = 0;
 	}
 
 	return &retEv;
 
+}
+
+void NetworkEvents::loadWormID(uint32_t wormID)
+{
+	this->wormID = wormID;
 }
 
 fsmData * NetworkEvents::getFSMData()
