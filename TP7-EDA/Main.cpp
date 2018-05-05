@@ -144,9 +144,9 @@ int main(int argc ,char * argv[]) {
 
 		// Worms
 		WormData wormData;
-		Worm worm1(&wormData, id1);
+		Worm worm1(&wormData, id1, networkEvents.getFSMData()->wormXMine);
 		stage.createWorms(&worm1);
-		Worm worm2(&wormData,id2);
+		Worm worm2(&wormData,id2, networkEvents.getFSMData()->wormXOther);
 		stage.createWorms(&worm2); 
 
 		bool quit = false;

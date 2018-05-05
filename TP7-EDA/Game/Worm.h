@@ -38,7 +38,7 @@ typedef enum State{
 class Worm
 {
 public:
-	Worm(WormData * data, uint32_t wormID_, float xoffset_ = 200, Direction dir = RIGHT_DR);
+	Worm(WormData * data, uint32_t wormID_, uint16_t pos, Direction dir = RIGHT_DR);
 	~Worm();
 	// Esta funcion setea el estado de 'MOVE' y la direccion hacia la cual se mueve
 	void move(Direction a); 

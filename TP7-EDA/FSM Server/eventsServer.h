@@ -4,7 +4,7 @@
 
 
 
-#define TIMEOUT_TIME_ 100
+#define TIMEOUT_TIME_ 500
 
 STATE notREADY_s[];
 STATE waitEVENT_s[];
