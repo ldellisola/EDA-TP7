@@ -67,6 +67,7 @@ void notReady_AnswerIAM_s(void * data) {
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(ACKQ_HD, NOTLOADED, 0,NOTLOADED);
+	cout << "Composing ACK:" << packet << endl;
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_,packet.createACKQ());
 	cout << "ACK sent" << endl;
 	pointer->leave = true;
@@ -79,6 +80,7 @@ void notReady_ReadyRecieved_s(void * data)
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, pointer->wormXMine);
+	cout << "Composing ACK:" << packet << endl;
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_,packet.createIAM());	//Borre un TIME que no estaba definido y creo que estaba de mas
 	cout << "Waiting for ACK" << endl;
 }
@@ -87,12 +89,13 @@ void waitEvent_SendEvent_s(void * data)
 {// Tengo que mandar el evento que me llego. Lo tengo en el puntero data.
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
-	cout << "Sending local event to network. Waiting for ACK" << endl;
-	packet.setPacket(MOVE_FSM, TransformEvent_s((pointer->ev.Event)), pointer->ev.wormID);
+	cout << "Sending local event to network" << endl;
+	packet.setPacket(MOVE_HD, TransformEvent_s((pointer->ev.Event)), pointer->ev.wormID);
+	cout << "Composing MOVE Packet:" << packet << endl;
 	string msg = packet.createMOVE();
 	// Asumo que  el paquete siempre se envia bien y tarda en recibirlo // NO ES BLOQUEANTE
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_,msg);
-	cout << "Local event sent" << endl;
+	cout << "Local event sent. Waiting for ACK" << endl;
 }
 ///OK
 void waitEvent_GetEvent_s(void * data)
@@ -102,6 +105,7 @@ void waitEvent_GetEvent_s(void * data)
 
 	cout << "Event received. Sending ACK" << endl;
 	packet.setPacket(ACK_HD, NOTLOADED, pointer->ev.wormID);
+	cout << "Composing ACK:" << packet << endl;
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_, packet.createACK());
 	cout << "ACK sent. Leaving FSM" << endl;
 

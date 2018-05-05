@@ -65,7 +65,7 @@ void EventHandler::HandleEventDispatch(Stage& stage)
 {
 	while (events.size()) {
 		if (events.begin()->Event != TIMER_EV && events.begin()->Event != NOEVENT) {
-			stage.addEvent(&events.begin());
+			stage.addEvent(*events.begin());
 		}
 		displatchEvent(*events.begin(), stage);
 		events.pop_front();

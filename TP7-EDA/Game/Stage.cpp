@@ -45,14 +45,14 @@ void Stage::addObserver(Observer * obs)
 	observers.push_back(obs);
 }
 
-void Stage::addEvent(void * ev)
+void Stage::addEvent(Ev_t  ev)
 {
 	this->event = ev;
 }
 
-void * Stage::getEvetn()
+Ev_t * Stage::getEvetn()
 {
-	return this->event;
+	return &this->event;
 }
 
 void Stage::wormMoveLeft(unsigned int wormID)

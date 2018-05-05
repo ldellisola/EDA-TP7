@@ -1,6 +1,7 @@
 #pragma once
 #include "Worm.h"
 #include "../Observers/Observer.h"
+#include "../Events/Ev_t.h"
 #include <vector>
 
 using namespace std;
@@ -21,8 +22,8 @@ public:
 
 	void addObserver(Observer * obs);
 
-	void addEvent(void * ev);
-	void * getEvetn();
+	void addEvent(Ev_t  ev);
+	Ev_t * getEvetn();
 
 	void wormMoveLeft(unsigned int wormID);
 	void wormMoveRight(unsigned int wormID);
@@ -42,7 +43,7 @@ private:
 	vector<Worm> worms;
 	vector<Observer *> observers;
 	ActionType lastAction;
-	void * event = NULL;
+	Ev_t event;
 	void update();
 	bool leave = false;
 };
