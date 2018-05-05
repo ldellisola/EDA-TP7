@@ -15,7 +15,7 @@
 
 #define IPFILE "direcciones.txt"
 
-#define initialWormX 800
+#define initialWormX 1000
 
 #define PORT "15667"
 
@@ -161,6 +161,7 @@ int main(int argc ,char * argv[]) {
 	}
 
 	delete fsmPointer;
+	getchar();
 	return 0;
 }
 
