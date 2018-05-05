@@ -7,6 +7,8 @@ bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 	//server->connect();
 	bool error = false;
 	bool keep = true;
+	Timer countTime;
+
 	while (keep && !error) {
 		if (server)
 			msg = fsminfo->server->getInfoTimed(TIMEOUT_TIME);
@@ -15,6 +17,9 @@ bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 		if (!msg.compare(SERVER_TIMEOUT)) {
 			fsminfo->timeouts += 1;
 			cout << "Timing out. Number" << fsminfo->timeouts << endl;
+			countTime.stop();
+			cout <<countTime.getTime() <<"Time passed" << endl;
+			countTime.start();
 		}
 		else
 			keep = false;
@@ -229,21 +234,26 @@ void NetworkEvents::update(void * data)
 		fsminfo = (fsmData *)this->fsmSE->getData();
 		fsminfo->ev = extEv;
 		this->fsmSE->setEvent(SEND_FSM);
+		bool getACK = true;
 
 		do {
 			this->fsmSE->run();
 
-			Packet packet;
-			fsminfo->timeouts = 0;
-			string msg;
+			if (getACK) {
 
-			if (getInfoWithTimeout(server, msg, fsminfo,true))
-				this->fsmSE->setEvent(ERROR_FSM);
-			else {
-				this->fsmSE->setEvent(ACK_FSM);
-				packet.setPacket(msg);
-				cout << packet << endl;
-				fsminfo->ev.wormID = packet.getWormID();
+				Packet packet;
+				fsminfo->timeouts = 0;
+				string msg;
+
+				if (getInfoWithTimeout(server, msg, fsminfo, true))
+					this->fsmSE->setEvent(ERROR_FSM);
+				else {
+					this->fsmSE->setEvent(ACK_FSM);
+					packet.setPacket(msg);
+					cout << packet << endl;
+					fsminfo->ev.wormID = packet.getWormID();
+				}
+				getACK = false;
 			}
 
 

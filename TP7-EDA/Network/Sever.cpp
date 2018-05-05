@@ -38,8 +38,12 @@ std::string Server::getInfo() {
 		lenght = this->serverSocket->read_some(boost::asio::buffer(buffer), error);
 	} while (error);
 
+	string retValue;
+
 	buffer[lenght] = 0;
-	std::string retValue = buffer;
+	for (int i = 0; i < lenght; i++) {
+		retValue.push_back(buffer[i]);
+	}
 	std::cout << "Recieved a message" << std::endl;
 
 	return retValue;
@@ -57,7 +61,9 @@ bool Server::getInfoSigle(string & msg)
 
 	if (!error) {
 		buffer[lenght] = 0;
-		msg = buffer;
+		for (int i = 0; i < lenght; i++) {
+			msg.push_back(buffer[i]);
+		}
 		returnError = false;
 		cout << "Message Recieved" << endl;
 	}
@@ -92,7 +98,9 @@ std::string Server::getInfoTimed(int ms)
 
 	if (!timeout) {
 		buffer[lenght] = 0;
-		retValue = buffer;
+		for (int i = 0; i < lenght; i++) {
+			retValue.push_back(buffer[i]);
+		}
 		std::cout << "Recieved a message" << std::endl;
 	}
 	else
