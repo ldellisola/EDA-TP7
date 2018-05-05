@@ -29,4 +29,6 @@ typedef struct fsmData {
 	Server * server;
 	bool exitProgram = false;
 
+	string oldPacket;
+
 };
