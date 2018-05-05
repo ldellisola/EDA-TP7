@@ -12,10 +12,9 @@ bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 			msg = fsminfo->server->getInfoTimed(TIMEOUT_TIME);
 		else
 			msg = fsminfo->client->getInfoTimed(TIMEOUT_TIME);
-		if (!msg.compare(SERVER_TIMEOUT))
-		{
+		if (!msg.compare(SERVER_TIMEOUT)) {
 			fsminfo->timeouts += 1;
-			cout << "Timeout number" << fsminfo->timeouts << endl;
+			cout << "Timing out. Number" << fsminfo->timeouts << endl;
 		}
 		else
 			keep = false;
@@ -23,6 +22,17 @@ bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 			error = true;
 	}
 	//server->stop();
+	return error;
+}
+
+bool getInfoOneTry(string&msg, fsmData * fsminfo, bool server) {
+
+	bool error;
+	if (server)
+		error = fsminfo->server->getInfoSigle(msg);
+	else
+		error = fsminfo->client->getInfoSigle(msg);
+
 	return error;
 }
 
@@ -37,14 +47,9 @@ NetworkEvents::NetworkEvents(uint16_t wormX)
 NetworkEvents::~NetworkEvents()
 {
 	if (server)
-	{
 		delete server;
-	}
-	if (client)
-	{
+	else if (client)
 		delete client;
-	}
-
 }
 
 bool NetworkEvents::initClient() {
@@ -105,6 +110,7 @@ bool NetworkEvents::initServer() {
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, fsminfo->wormXMine);
 	server->sendMessageTimed(TIMEOUT_TIME,packet.createIAM());
 
+	//cin.get();
 
 	// Espero a que venga un IAM del cliente
 	string msg;
@@ -121,6 +127,7 @@ bool NetworkEvents::initServer() {
 			fsmSE->setEvent(ERROR_FSM);
 
 		do {
+			cout << "FSM Event:" << fsmSE->actualEvent << endl;
 			this->fsmSE->run();
 			// Dentro de la FSM se manda el ultimo ACK y somos todos felices
 		} while (!fsminfo->leave);
@@ -252,7 +259,7 @@ void * NetworkEvents::getEvent(void * data)
 		string msg;
 
 
-		if (getInfoWithTimeout(server, msg, fsminfo,false))
+		if (getInfoOneTry( msg, fsminfo,false))
 			this->fsmCL->setEvent(NOEVENT_FSM);
 		else {
 			packet.setPacket(msg);
@@ -261,7 +268,6 @@ void * NetworkEvents::getEvent(void * data)
 			this->retEv = packet.getPacketEvent();
 			*size = 1;
 			fsminfo->ev = packet.getPacketEvent();
-			retEv.activate();
 		}
 		do {
 
@@ -282,7 +288,7 @@ void * NetworkEvents::getEvent(void * data)
 		string msg;
 	
 
-		if (getInfoWithTimeout(server, msg, fsminfo,true))
+		if (getInfoOneTry(msg, fsminfo, false))
 			this->fsmSE->setEvent(NOEVENT_FSM);
 		else {
 			this->fsmSE->setEvent(MOVE_FSM);
@@ -290,6 +296,8 @@ void * NetworkEvents::getEvent(void * data)
 			this->retEv = packet.getPacketEvent();
 			*size = 1;
 			fsminfo->ev = packet.getPacketEvent();
+			retEv.activate();
+			retEv.wormID = this->wormID;
 		}
 
 		do {
@@ -298,13 +306,17 @@ void * NetworkEvents::getEvent(void * data)
 		} while (!fsminfo->leave);
 
 	}
-	if (retEv.active == false)
-	{
+	if (!retEv.active) {
 		*size = 0;
 	}
 
 	return &retEv;
 
+}
+
+void NetworkEvents::loadWormID(uint32_t wormID)
+{
+	this->wormID = wormID;
 }
 
 fsmData * NetworkEvents::getFSMData()

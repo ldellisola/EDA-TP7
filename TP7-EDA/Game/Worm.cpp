@@ -13,6 +13,7 @@ Worm::Worm(WormData * data, uint32_t wormID_, float xoffset_, Direction dir)
 	this->state = STILL_ST;
 	this->prev_state = STILL_ST;
 	this->ticks = 0;
+	wormID = wormID_;
 }
 
 

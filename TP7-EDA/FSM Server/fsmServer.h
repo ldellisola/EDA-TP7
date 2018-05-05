@@ -13,9 +13,11 @@ public:
 	void run();
 	int setEvent(int ev_);
 	void * getData();
-private:
 	int actualEvent;
+	
+private:
 	STATE * actualState;
+	
 	STATE * state1;
 	STATE * state2;
 	STATE * state3;

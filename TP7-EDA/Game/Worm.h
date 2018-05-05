@@ -63,6 +63,7 @@ private:
 	void doJump();		//To use them ypu should set the state using 'move' and 'jump'
 	bool isXValid();	
 
+	uint32_t wormID;
 	Direction direction;
 	Point coord;
 	State prev_state;
