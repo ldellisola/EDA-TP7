@@ -288,7 +288,7 @@ void * NetworkEvents::getEvent(void * data)
 		string msg;
 	
 
-		if (getInfoOneTry(msg, fsminfo, false))
+		if (getInfoOneTry(msg, fsminfo, true))
 			this->fsmSE->setEvent(NOEVENT_FSM);
 		else {
 			this->fsmSE->setEvent(MOVE_FSM);

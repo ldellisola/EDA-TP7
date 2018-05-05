@@ -69,6 +69,8 @@ void notReady_AnswerIAM_s(void * data) {
 	packet.setPacket(ACKQ_HD, NOTLOADED, 0,NOTLOADED);
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_,packet.createACKQ());
 	cout << "ACK sent" << endl;
+	pointer->leave = true;
+	cout << "Leaving FSM" << endl;
 }
 
 void notReady_ReadyRecieved_s(void * data)

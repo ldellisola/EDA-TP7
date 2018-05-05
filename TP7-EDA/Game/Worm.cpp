@@ -4,10 +4,10 @@
 
 
 using namespace std;
-Worm::Worm(WormData * data, uint32_t wormID_, float xoffset_, Direction dir)
+Worm::Worm(WormData * data, uint32_t wormID_, uint16_t pos, Direction dir)
 {
 	this->data = data;
-	this->coord.x = this->data->minX + xoffset_ ; 
+	this->coord.x = pos; 
 	this->coord.y = this->data->minY; 
 	this->direction = dir;
 	this->state = STILL_ST;
