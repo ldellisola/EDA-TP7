@@ -7,6 +7,8 @@ bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 	//server->connect();
 	bool error = false;
 	bool keep = true;
+	Timer countTime;
+
 	while (keep && !error) {
 		if (server)
 			msg = fsminfo->server->getInfoTimed(TIMEOUT_TIME);
@@ -15,6 +17,9 @@ bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 		if (!msg.compare(SERVER_TIMEOUT)) {
 			fsminfo->timeouts += 1;
 			cout << "Timing out. Number" << fsminfo->timeouts << endl;
+			countTime.stop();
+			cout <<countTime.getTime() <<"Time passed" << endl;
+			countTime.start();
 		}
 		else
 			keep = false;

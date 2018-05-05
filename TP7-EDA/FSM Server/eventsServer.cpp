@@ -20,7 +20,7 @@ STATE notREADY_s[] = {
 STATE waitEVENT_s[] = {
 { ANS_IAM_FSM , notREADY_s,failedcom_s },
 { SEND_FSM,waitACK_s,waitEvent_SendEvent_s },
-{ MOVE_FSM,waitEVENT_s,waitEvent_SendEvent_s },
+{ MOVE_FSM,waitEVENT_s,waitEvent_GetEvent_s },
 { ACK_FSM,notREADY_s,failedcom_s },
 { QUIT_FSM,notREADY_s,waitEvent_QuitRecieved_s},
 { ERROR_FSM,notREADY_s,errorfun_s },

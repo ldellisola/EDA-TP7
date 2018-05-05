@@ -55,6 +55,11 @@ Ev_t * Stage::getEvetn()
 	return &this->event;
 }
 
+uint32_t Stage::getMyWormID()
+{
+	return this->myID;
+}
+
 void Stage::wormMoveLeft(unsigned int wormID)
 {
 	worms[trasnformIDintoPos(wormID)].move(LEFT_DR);

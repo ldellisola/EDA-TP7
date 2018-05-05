@@ -24,6 +24,7 @@ public:
 
 	void addEvent(Ev_t  ev);
 	Ev_t * getEvetn();
+	uint32_t getMyWormID();
 
 	void wormMoveLeft(unsigned int wormID);
 	void wormMoveRight(unsigned int wormID);
