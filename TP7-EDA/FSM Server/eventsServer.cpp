@@ -58,31 +58,31 @@ int8_t TransformEvent_s(Evnt ev) {
 }
 
 void waitEvent_NoEvent_s(void*data) {
-	cout << "No Event was Recieved" << endl;
+	//cout << "No Event was Recieved" << endl;
 }
 
 
 void notReady_AnswerIAM_s(void * data) {
-	cout << "IAM recieved. Sending ACK" << endl;
+	//cout << "IAM recieved. Sending ACK" << endl;
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(ACKQ_HD, NOTLOADED, 0,NOTLOADED);
-	cout << "Composing ACK:" << packet << endl;
+	//cout << "Composing ACK:" << packet << endl;
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_,packet.createACKQ());
-	cout << "ACK sent" << endl;
+	//cout << "ACK sent" << endl;
 	pointer->leave = true;
-	cout << "Leaving FSM" << endl;
+//	cout << "Leaving FSM" << endl;
 }
 
 void notReady_ReadyRecieved_s(void * data)
 {
-	cout << "IAM recieved. Answering Handshake" << endl;
+	//cout << "IAM recieved. Answering Handshake" << endl;
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, pointer->wormXMine);
-	cout << "Composing ACK:" << packet << endl;
+	//cout << "Composing ACK:" << packet << endl;
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_,packet.createIAM());	//Borre un TIME que no estaba definido y creo que estaba de mas
-	cout << "Waiting for ACK" << endl;
+	//cout << "Waiting for ACK" << endl;
 }
 ///OK
 void waitEvent_SendEvent_s(void * data)
