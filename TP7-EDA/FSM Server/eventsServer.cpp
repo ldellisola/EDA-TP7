@@ -63,7 +63,7 @@ void waitEvent_NoEvent_s(void*data) {
 
 
 void notReady_AnswerIAM_s(void * data) {
-	//cout << "IAM recieved. Sending ACK" << endl;
+	cout << "IAM recieved. Sending ACK" << endl;
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(ACKQ_HD, NOTLOADED, 0,NOTLOADED);
@@ -76,7 +76,7 @@ void notReady_AnswerIAM_s(void * data) {
 
 void notReady_ReadyRecieved_s(void * data)
 {
-	//cout << "IAM recieved. Answering Handshake" << endl;
+	cout << "IAM recieved. Answering Handshake" << endl;
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, pointer->wormXMine);
@@ -89,9 +89,9 @@ void waitEvent_SendEvent_s(void * data)
 {// Tengo que mandar el evento que me llego. Lo tengo en el puntero data.
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
-	cout << "Sending local event to network" << endl;
+	//cout << "Sending local event to network" << endl;
 	packet.setPacket(MOVE_HD, TransformEvent_s((pointer->ev.Event)), pointer->ev.wormID);
-	cout << "Composing MOVE Packet:" << packet << endl;
+	//cout << "Composing MOVE Packet:" << packet << endl;
 	pointer->oldPacket = packet.createMOVE();
 	// Asumo que  el paquete siempre se envia bien y tarda en recibirlo // NO ES BLOQUEANTE
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_, pointer->oldPacket);
@@ -106,9 +106,9 @@ void waitEvent_GetEvent_s(void * data)
 
 	cout << "Event received. Sending ACK" << endl;
 	packet.setPacket(ACK_HD, NOTLOADED, pointer->ev.wormID);
-	cout << "Composing ACK:" << packet << endl;
+	//cout << "Composing ACK:" << packet << endl;
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_, packet.createACK());
-	cout << "ACK sent. Leaving FSM" << endl;
+	//cout << "ACK sent. Leaving FSM" << endl;
 
 	pointer->leave = true;
 	pointer->exitProgram = false;
@@ -139,6 +139,11 @@ void errorfun_s(void * data)
 {
 	cout << "There was an error. Shutting down" << endl;
 	fsmData * pointer = (fsmData *)data;
+	Packet packet;
+	if (pointer->client)
+		pointer->client->sendMessage(packet.createERROR());
+	else if (pointer->server)
+		pointer->server->sendMessage(packet.createERROR());
 	pointer->leave = true;
 	pointer->error = true;
 	pointer->exitProgram = true;

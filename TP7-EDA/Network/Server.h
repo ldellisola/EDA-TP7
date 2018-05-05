@@ -18,6 +18,7 @@ public:
 	bool getInfoSigle(string& msg);
 	string getInfoTimed(int ms);
 	void sendMessageTimed(int ms, string msg);
+	void sendMessage(string msg);
 
 
 private:
