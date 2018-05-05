@@ -36,6 +36,8 @@ bool getInfoOneTry(string&msg, fsmData * fsminfo, bool server) {
 	return error;
 }
 
+
+
 NetworkEvents::NetworkEvents(uint16_t wormX)
 {
 	Ev_t extEv;
@@ -62,9 +64,9 @@ bool NetworkEvents::initClient() {
 	fsminfo->timeouts = 0;
 	string msg;
 
-	if (getInfoWithTimeout(server, msg, fsminfo,false))
-		this->fsmCL->setEvent(ERROR_FSM);
-	else {
+	msg = client->getInfo();
+	
+	
 		packet.setPacket(msg);
 		cout << packet << endl;
 		if (IAM_HD == packet.getHeader()) {
@@ -73,28 +75,30 @@ bool NetworkEvents::initClient() {
 		}
 		else
 			fsmCL->setEvent(ERROR_FSM);
-	}
+	
 	// Me llego perfecto el IAM Entro en la fsm
 	do {
 		this->fsmCL->run();
 		// Aca ya le mande mi IAM y estoy esperando a que me llegue un ACK.
-		Packet packet;
-		fsminfo->timeouts = 0;
-		string msg;
+		if (!fsminfo->leave)
+		{
+			Packet packet;
+			fsminfo->timeouts = 0;
+			string msg;
 
-		if (getInfoWithTimeout(server, msg, fsminfo,false))
-			this->fsmCL->setEvent(ERROR_FSM);
-		else {
-			packet.setPacket(msg);
-			cout << packet << endl;
-			if (ACKQ_HD == packet.getHeader()) {
-				fsmCL->setEvent(ACK_FSM);
-				success = true;
+			if (getInfoWithTimeout(server, msg, fsminfo, false))
+				this->fsmCL->setEvent(ERROR_FSM);
+			else {
+				packet.setPacket(msg);
+				cout << packet << endl;
+				if (ACKQ_HD == packet.getHeader()) {
+					fsmCL->setEvent(ACK_FSM);
+					success = true;
+				}
+				else
+					fsmCL->setEvent(ERROR_FSM);
 			}
-			else
-				fsmCL->setEvent(ERROR_FSM);
 			// Me llega el ACK hermoso
-
 		}
 	} while (!fsminfo->leave);
 

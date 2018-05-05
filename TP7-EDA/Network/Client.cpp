@@ -61,6 +61,23 @@ bool Client::sendMessageTimed(string msg, int ms)
 	return !timeout;
 }
 
+std::string Client::getInfo() {
+
+	char buffer[1 + 255 + 1];
+	size_t lenght = 0;
+	boost::system::error_code error;
+
+	do {
+		lenght = this->clientSocket->read_some(boost::asio::buffer(buffer), error);
+	} while (error);
+
+	buffer[lenght] = 0;
+	std::string retValue = buffer;
+	std::cout << "Recieved a message" << std::endl;
+
+	return retValue;
+}
+
 string Client::getInfoTimed(int ms)
 {
 	Timer timer;
@@ -87,6 +104,11 @@ string Client::getInfoTimed(int ms)
 
 	if (!timeout) {
 		buffer[lenght] = 0;
+
+		for (int i = 0; i < lenght; i++) {
+			retValue.push_back(buffer[i]);
+		}
+
 		retValue = buffer;
 		std::cout << "Recieved a message" << std::endl;
 	}
