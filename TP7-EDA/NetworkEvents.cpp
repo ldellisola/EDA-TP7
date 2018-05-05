@@ -66,6 +66,7 @@ bool NetworkEvents::initClient() {
 		this->fsmCL->setEvent(ERROR_FSM);
 	else {
 		packet.setPacket(msg);
+		cout << packet << endl;
 		if (IAM_HD == packet.getHeader()) {
 			fsminfo->wormXOther = packet.getWormX();
 			fsmCL->setEvent(IAM_FSM);
@@ -85,6 +86,7 @@ bool NetworkEvents::initClient() {
 			this->fsmCL->setEvent(ERROR_FSM);
 		else {
 			packet.setPacket(msg);
+			cout << packet << endl;
 			if (ACKQ_HD == packet.getHeader()) {
 				fsmCL->setEvent(ACK_FSM);
 				success = true;
@@ -118,6 +120,7 @@ bool NetworkEvents::initServer() {
 		this->fsmSE->setEvent(ERROR_FSM);
 	else {
 		packet.setPacket(msg);
+		cout << packet << endl;
 		if (IAM_HD == packet.getHeader()) {
 			fsminfo->wormXOther = packet.getWormX();
 			fsmSE->setEvent(ANS_IAM_FSM);
@@ -200,6 +203,7 @@ void NetworkEvents::update(void * data)
 				this->fsmCL->setEvent(ERROR_FSM);
 			else {
 				packet.setPacket(msg);
+				cout << packet << endl;
 				if(!(fsminfo->ev.wormID - packet.getWormID()))
 					this->fsmCL->setEvent(ACK_FSM);
 				else
@@ -230,6 +234,7 @@ void NetworkEvents::update(void * data)
 			else {
 				this->fsmSE->setEvent(ACK_FSM);
 				packet.setPacket(msg);
+				cout << packet << endl;
 				fsminfo->ev.wormID = packet.getWormID();
 			}
 
@@ -263,6 +268,7 @@ void * NetworkEvents::getEvent(void * data)
 			this->fsmCL->setEvent(NOEVENT_FSM);
 		else {
 			packet.setPacket(msg);
+			cout << packet << endl;
 			this->fsmCL->setEvent(MOVE_FSM);
 			
 			this->retEv = packet.getPacketEvent();
