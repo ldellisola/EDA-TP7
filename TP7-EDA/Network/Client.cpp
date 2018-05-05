@@ -108,7 +108,10 @@ bool Client::getInfoSigle(string & msg)
 
 	if (!error) {
 		buffer[lenght] = 0;
-		msg = buffer;
+		
+		for (int i = 0; i < lenght; i++) {
+			msg.push_back(buffer[i]);
+		}
 		returnError = false;
 		cout << "Message Recieved" << endl;
 	}
