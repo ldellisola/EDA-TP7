@@ -206,26 +206,29 @@ void NetworkEvents::update(void * data)
 		fsminfo = (fsmData *)this->fsmCL->getData();
 		fsminfo->ev = extEv;
 		this->fsmCL->setEvent(SEND_FSM);
+		bool getACK = true;
 
 		do {
 			this->fsmCL->run();
 
-			
-			Packet packet;
-			fsminfo->timeouts = 0;
-			string msg;
+			if (getACK)
+			{
+
+				Packet packet;
+				fsminfo->timeouts = 0;
+				string msg;
 
 
-			if (getInfoWithTimeout(fsminfo->oldPacket, msg, fsminfo,false))
-				this->fsmCL->setEvent(ERROR_FSM);
-			else {
-				packet.setPacket(msg);
-				cout << packet << endl;
-				if(!(fsminfo->ev.wormID - packet.getWormID()))
-					this->fsmCL->setEvent(ACK_FSM);
-				else
+				if (getInfoWithTimeout(server, msg, fsminfo, false))
 					this->fsmCL->setEvent(ERROR_FSM);
+				else {
+					packet.setPacket(msg);
+					cout << packet << endl;
+					this->fsmCL->setEvent(ACK_FSM);
+					fsminfo->ev.wormID = packet.getWormID();
 
+				}
+				getACK = false;
 			}
 
 			fsminfo->oldPacket.clear();
@@ -297,6 +300,8 @@ void * NetworkEvents::getEvent(void * data)
 			this->retEv = packet.getPacketEvent();
 			*size = 1;
 			fsminfo->ev = packet.getPacketEvent();
+			retEv.activate();
+			retEv.wormID = this->wormID;
 		}
 		do {
 
