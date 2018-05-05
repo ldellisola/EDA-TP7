@@ -82,9 +82,9 @@ int main(int argc ,char * argv[]) {
 		
 	}
 	else {
-		Client client(ips.getOtherIP(), PORT);
-		networkEvents.loadClient(&client);
-		client.link();
+		Client * client= new Client(ips.getOtherIP(), PORT);
+		networkEvents.loadClient(client);
+		client->link();
 		id1 = WORM_C;
 		id2 = WORM_S;
 		fsmPointer = (void *) new fsmC(notREADY_c, waitEVENT_c, waitACK_c, (void *)networkEvents.getFSMData());
@@ -139,7 +139,7 @@ int main(int argc ,char * argv[]) {
 		// Observers
 		DrawStage drawStage(JUMPFILE, JUMPPICS, WALKFILE, WALKPICS, BACKGROUNDFILE, STAGEFILE);
 		stage.addObserver(&drawStage);
-		stage.addObserver(&networkEvents);
+		//stage.addObserver(&networkEvents);
 		
 
 		// Worms
