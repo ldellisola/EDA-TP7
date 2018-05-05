@@ -15,7 +15,7 @@
 
 */
 
-#define TIMEOUT_TIME (500) // en ms
+#define TIMEOUT_TIME (50) // en ms
 
 
 class NetworkEvents : public Observer, public Controller

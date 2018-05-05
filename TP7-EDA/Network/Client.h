@@ -20,6 +20,7 @@ public:
 	//string recieveMessage();
 	void sendMessage(string msg);
 	bool sendMessageTimed(string msg, int ms);
+	std::string getInfo();
 	string getInfoTimed(int ms);
 
 	bool getInfoSigle(string & msg);
