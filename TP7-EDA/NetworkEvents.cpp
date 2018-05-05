@@ -177,15 +177,15 @@ void NetworkEvents::update(void * data)
 	bool great = false;
 	if (data != NULL) {
 		st = (Stage *)data;
-		if (st->getEvetn() != NULL) {
+		if (st->getEvetn() != NULL ) {
 			extEv = *(Ev_t *)st->getEvetn();
-			great = true;
+			if (extEv.active)
+				great = true;
 		}
 	}
 	fsmData * fsminfo;
 
 	if (fsmClient && data!= NULL &&great) {
-		//extEv = *(Ev_t *)data;
 
 		fsminfo = (fsmData *)this->fsmCL->getData();
 		fsminfo->ev = extEv;
@@ -217,7 +217,6 @@ void NetworkEvents::update(void * data)
 
 	}
 	else if (fsmServer && data != NULL && great) {
-		extEv = *(Ev_t *)data;
 		fsminfo = (fsmData *)this->fsmSE->getData();
 		fsminfo->ev = extEv;
 		this->fsmSE->setEvent(SEND_FSM);
