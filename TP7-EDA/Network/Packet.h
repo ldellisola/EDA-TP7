@@ -34,6 +34,7 @@ public:
 	int8_t getHeader();
 	Ev_t getPacketEvent();
 	uint16_t getWormX();
+	friend ostream& operator<<(ostream& o, Packet& c);
 
 private:
 	Evnt transformActionToEvent();

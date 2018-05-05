@@ -202,3 +202,61 @@ string Packet::getNumToBEString(uint16_t * number)
 
 	return ret;
 }
+
+ostream& operator<<(ostream& o, Packet& c)
+{
+	
+	string head;
+	string action;
+	switch (c.getHeader())
+	{
+	case ACKQ_HD:
+
+		head = "ACKQ";
+		o << "header = "<< head <<"Worn ID = "<< c.getWormID() << endl;
+		break;
+	case ACK_HD:
+		head = "ACK";
+		o << "header = " << head << "Worn ID = " << c.getWormID() << endl;
+		break;
+	case IAM_HD:
+		head = "IAM";
+		o << "header = " << head << "Worn X = " << c.getWormX() << endl;
+		break;
+	case MOVE_HD:
+		head = "MOVE";
+		switch (c.transformActionToEvent())
+		{
+		case LEFT_EV:
+			action = "LEFT";
+			break;
+		case RIGHT_EV:
+			action = "RIGHT";
+			break;
+		case JUMP_EV:
+			action = "JUMP";
+			break;
+		case FLIP_RIGHT_EV:
+			action = "FLIP RIGHT";
+		}
+		o << "header = " << head << "action= " << action << endl;
+
+		break;
+	case QUIT_HD:
+		head = "QUIT";
+		o << head << endl;
+		break;
+	case ERROR_HD:
+		head = "ERROR";
+		o << head << endl;
+		break;
+	}
+
+	return o;
+}
+#define ACKQ_HD (0x00)
+#define ACK_HD (0x01)
+#define IAM_HD (0x02)
+#define MOVE_HD (0x03)
+#define QUIT_HD (0xFF)
+#define ERROR_HD (0xE0)
