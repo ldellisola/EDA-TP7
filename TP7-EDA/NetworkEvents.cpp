@@ -219,7 +219,7 @@ void NetworkEvents::update(void * data)
 				string msg;
 
 
-				if (getInfoWithTimeout(server, msg, fsminfo, false))
+				if (getInfoWithTimeout(fsminfo->oldPacket, msg, fsminfo, false))
 					this->fsmCL->setEvent(ERROR_FSM);
 				else {
 					packet.setPacket(msg);
