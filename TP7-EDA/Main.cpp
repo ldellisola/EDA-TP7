@@ -133,13 +133,13 @@ int main(int argc ,char * argv[]) {
 		allegroEvents.loadWormID(id1);
 		eventHandler.loadController(&allegroEvents);
 		networkEvents.loadWormID(id2);
-		eventHandler.loadController(&networkEvents);
+		//eventHandler.loadController(&networkEvents);
 		
 
 		// Observers
 		DrawStage drawStage(JUMPFILE, JUMPPICS, WALKFILE, WALKPICS, BACKGROUNDFILE, STAGEFILE);
 		stage.addObserver(&drawStage);
-		//stage.addObserver(&networkEvents);
+		stage.addObserver(&networkEvents);
 		
 
 		// Worms

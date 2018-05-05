@@ -96,6 +96,7 @@ void waitEvent_SendEvent_s(void * data)
 	// Asumo que  el paquete siempre se envia bien y tarda en recibirlo // NO ES BLOQUEANTE
 	pointer->server->sendMessageTimed(TIMEOUT_TIME_,msg);
 	cout << "Local event sent. Waiting for ACK" << endl;
+	pointer->leave = false;
 }
 ///OK
 void waitEvent_GetEvent_s(void * data)

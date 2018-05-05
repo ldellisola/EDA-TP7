@@ -92,6 +92,8 @@ void Stage::refresh()
 
 	lastAction = REFRESH_AT;
 	update();
+
+	this->event.deactivate();
 	
 }
 
