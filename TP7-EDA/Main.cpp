@@ -139,7 +139,7 @@ int main(int argc ,char * argv[]) {
 		// Observers
 		DrawStage drawStage(JUMPFILE, JUMPPICS, WALKFILE, WALKPICS, BACKGROUNDFILE, STAGEFILE);
 		stage.addObserver(&drawStage);
-		//stage.addObserver(&networkEvents);
+		stage.addObserver(&networkEvents);
 		
 
 		// Worms

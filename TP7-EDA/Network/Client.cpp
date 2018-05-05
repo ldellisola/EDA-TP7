@@ -109,7 +109,7 @@ string Client::getInfoTimed(int ms)
 			retValue.push_back(buffer[i]);
 		}
 
-		retValue = buffer;
+		//retValue = buffer;
 		std::cout << "Recieved a message" << std::endl;
 	}
 	else

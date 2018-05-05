@@ -92,6 +92,7 @@ void Stage::refresh()
 
 	lastAction = REFRESH_AT;
 	update();
+	this->event.deactivate();
 	
 }
 
@@ -109,5 +110,6 @@ void Stage::update()
 {
 	for (Observer * obs : observers)
 		obs->update(this);
+
 }
 
