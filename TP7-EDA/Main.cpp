@@ -161,7 +161,7 @@ int main(int argc ,char * argv[]) {
 	}
 
 	delete fsmPointer;
-	getchar();
+	//getchar();
 	return 0;
 }
 

@@ -25,8 +25,6 @@ bool getInfoWithTimeout(string msgSend,string& msg, fsmData * fsminfo, bool serv
 				fsminfo->server->sendMessageTimed(TIMEOUT_TIME, msgSend);
 			else
 				fsminfo->client->sendMessageTimed(msgSend,TIMEOUT_TIME);*/
-
-
 		}
 		else
 			keep = false;
