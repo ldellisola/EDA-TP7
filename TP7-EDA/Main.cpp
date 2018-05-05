@@ -43,9 +43,9 @@ int main(int argc ,char * argv[]) {
 	void * fsmPointer = NULL;
 
 	if (ips.imServer) {
-		Server server(PORT);
-		networkEvents.loadServer(&server);
-		server.connect();
+		Server *server = new Server(PORT);
+		networkEvents.loadServer(server);
+		server->connect();
 		id1 = WORM_S;
 		id2 = WORM_C;
 		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)networkEvents.getFSMData());
@@ -54,9 +54,9 @@ int main(int argc ,char * argv[]) {
 
 	}
 	else {
-		Client client(ips.getOtherIP(), PORT);
-		networkEvents.loadClient(&client);
-		client.link();
+		Client *client = new Client(ips.getOtherIP(), PORT);
+		networkEvents.loadClient(client);
+		client->link();
 		id1 = WORM_C;
 		id2 = WORM_S;
 		fsmPointer = (void *) new fsmC(notREADY_c, waitEVENT_c, waitACK_c, (void *)networkEvents.getFSMData());

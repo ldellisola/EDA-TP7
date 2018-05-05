@@ -24,7 +24,7 @@ STATE waitEVENT_c[] = {
 { QUIT_FSM,notREADY_c,waitEvent_QuitRecieved_c },
 { ERROR_FSM,notREADY_c,errorfun_c },
 { IAM_FSM, notREADY_c,failedcom_c },
-
+{ NOEVENT_FSM,waitEVENT_c,waitEvent_NoEvent_c },
 { END,notREADY_c,reset_c },
 };
 
