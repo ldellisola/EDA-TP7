@@ -58,32 +58,32 @@ int8_t TransformEvent_c(Evnt ev) {
 }
 
 void waitEvent_NoEvent_c(void*data) {
-	cout << "No Event was Recieved" << endl;
+	//cout << "No Event was Recieved" << endl;
 }
 
 
 void notReady_AnswerIAM_c(void * data) {
-	cout << "IAM recieved. Sending ACK" << endl;
+	//cout << "IAM recieved. Sending ACK" << endl;
 	fsmData * pointer = (fsmData *)data;
 	//pointer->client->link();
 	Packet packet;
 	packet.setPacket(ACKQ_HD, NOTLOADED, 0, NOTLOADED);
 	pointer->client->sendMessage(packet.createACKQ());
 	//pointer->client->stop();
-	cout << "ACK sent" << endl;
+	//cout << "ACK sent" << endl;
 }
 
 ///OK
 void notReady_ReadyRecieved_c(void * data)
 {
-	cout << "IAM recieved. Answering Handshake" << endl;
+	//cout << "IAM recieved. Answering Handshake" << endl;
 	fsmData * pointer = (fsmData *)data;
 	//pointer->client->link();
 	Packet packet;
 	packet.setPacket(IAM_HD, NOTLOADED, NOTLOADED, pointer->wormXMine);
 	pointer->client->sendMessage(packet.createIAM());
 	//pointer->client->stop();
-	cout << "Waiting for ACK" << endl;
+	//cout << "Waiting for ACK" << endl;
 }
 ///OK
 void waitEvent_SendEvent_c(void * data)
