@@ -92,9 +92,9 @@ void waitEvent_SendEvent_s(void * data)
 	cout << "Sending local event to network" << endl;
 	packet.setPacket(MOVE_HD, TransformEvent_s((pointer->ev.Event)), pointer->ev.wormID);
 	cout << "Composing MOVE Packet:" << packet << endl;
-	string msg = packet.createMOVE();
+	pointer->oldPacket = packet.createMOVE();
 	// Asumo que  el paquete siempre se envia bien y tarda en recibirlo // NO ES BLOQUEANTE
-	pointer->server->sendMessageTimed(TIMEOUT_TIME_,msg);
+	pointer->server->sendMessageTimed(TIMEOUT_TIME_, pointer->oldPacket);
 	cout << "Local event sent. Waiting for ACK" << endl;
 	pointer->leave = false;
 }

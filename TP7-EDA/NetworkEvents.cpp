@@ -1,7 +1,7 @@
 
 #include "Network\NetworkEvents.h"
 
-bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
+bool getInfoWithTimeout(string msgSend,string& msg, fsmData * fsminfo, bool server)
 {
 
 	//server->connect();
@@ -20,6 +20,13 @@ bool getInfoWithTimeout(void *  net,string& msg, fsmData * fsminfo, bool server)
 			countTime.stop();
 			cout <<countTime.getTime() <<"Time passed" << endl;
 			countTime.start();
+
+			if (server)
+				fsminfo->server->sendMessageTimed(TIMEOUT_TIME, msgSend);
+			else
+				fsminfo->client->sendMessageTimed(msgSend,TIMEOUT_TIME);
+
+
 		}
 		else
 			keep = false;
@@ -89,12 +96,12 @@ bool NetworkEvents::initClient() {
 		{
 			Packet packet;
 			fsminfo->timeouts = 0;
-			string msg;
+			string msg2;
 
-			if (getInfoWithTimeout(server, msg, fsminfo, false))
+			if (getInfoWithTimeout(packet.createIAM(), msg2, fsminfo, false))
 				this->fsmCL->setEvent(ERROR_FSM);
 			else {
-				packet.setPacket(msg);
+				packet.setPacket(msg2);
 				cout << packet << endl;
 				if (ACKQ_HD == packet.getHeader()) {
 					fsmCL->setEvent(ACK_FSM);
@@ -125,7 +132,7 @@ bool NetworkEvents::initServer() {
 
 	// Espero a que venga un IAM del cliente
 	string msg;
-	if (getInfoWithTimeout(server, msg, fsminfo,true))
+	if (getInfoWithTimeout(packet.createIAM(), msg, fsminfo,true))
 		this->fsmSE->setEvent(ERROR_FSM);
 	else {
 		packet.setPacket(msg);
@@ -202,13 +209,14 @@ void NetworkEvents::update(void * data)
 
 		do {
 			this->fsmCL->run();
+
 			
 			Packet packet;
 			fsminfo->timeouts = 0;
 			string msg;
 
 
-			if (getInfoWithTimeout(server, msg, fsminfo,false))
+			if (getInfoWithTimeout(fsminfo->oldPacket, msg, fsminfo,false))
 				this->fsmCL->setEvent(ERROR_FSM);
 			else {
 				packet.setPacket(msg);
@@ -220,6 +228,7 @@ void NetworkEvents::update(void * data)
 
 			}
 
+			fsminfo->oldPacket.clear();
 
 		} while (!fsminfo->leave);
 
@@ -240,7 +249,7 @@ void NetworkEvents::update(void * data)
 				fsminfo->timeouts = 0;
 				string msg;
 
-				if (getInfoWithTimeout(server, msg, fsminfo, true))
+				if (getInfoWithTimeout(fsminfo->oldPacket, msg, fsminfo, true))
 					this->fsmSE->setEvent(ERROR_FSM);
 				else {
 					this->fsmSE->setEvent(ACK_FSM);
@@ -249,6 +258,7 @@ void NetworkEvents::update(void * data)
 					fsminfo->ev.wormID = packet.getWormID();
 				}
 				getACK = false;
+				fsminfo->oldPacket.clear();
 			}
 
 
