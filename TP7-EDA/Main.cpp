@@ -15,7 +15,7 @@
 
 #define IPFILE "direcciones.txt"
 
-#define initialWormX 1000
+#define initialWormX 800
 
 #define PORT "15667"
 
@@ -133,7 +133,7 @@ int main(int argc ,char * argv[]) {
 		allegroEvents.loadWormID(id1);
 		eventHandler.loadController(&allegroEvents);
 		networkEvents.loadWormID(id2);
-		eventHandler.loadController(&networkEvents);
+		//eventHandler.loadController(&networkEvents);
 		
 
 		// Observers

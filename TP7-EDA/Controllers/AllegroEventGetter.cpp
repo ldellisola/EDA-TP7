@@ -67,6 +67,7 @@ void * AllegroEventGetter::getEvent(void * data)
 					}
 					else if (!ev[0].active && ev[0].Event == RIGHT_EV) {
 						ev[0].Event = FLIP_RIGHT_EV;
+						ev[0].wormID = this->wormID;
 						ev[0].activate();
 					}
 				}
@@ -82,7 +83,7 @@ void * AllegroEventGetter::getEvent(void * data)
 				{
 					ev[0].activate();
 					ev[0].wormID = this->wormID;
-					ev[0].time->start();
+					ev[0].killTimer();
 				}
 			}
 			break;
