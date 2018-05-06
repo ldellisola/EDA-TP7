@@ -18,7 +18,7 @@ void Client::link()
 
 	auto q = ip::tcp::resolver::query(ipToConect.c_str(), this->port);
 	this->endpoint = clientResolver->resolve(q);
-	cout << "Waiting for server to connect" << endl;
+	cout << "Connecting to Server" << endl;
 	connect(*clientSocket, endpoint);
 	clientSocket->non_blocking(true);
 	
