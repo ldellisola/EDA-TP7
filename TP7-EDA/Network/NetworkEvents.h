@@ -11,8 +11,6 @@
 	No me gusta la implementacion de la FSM de networking y aca me suena a que hay algo raro, ya que paso como maximo dos veces por la FSM cuando quiero
 	enviar o recibir un paquete. El problema es que no se me ocurre otra forma de hacerlo.
 
-
-
 */
 
 #define TIMEOUT_TIME (20) // en ms
@@ -45,10 +43,10 @@ private:
 	Server * server = NULL;
 
 	bool fsmClient = false;
-	fsmC * fsmCL = NULL;	//CAMBIE EL NOMBRE A fsmCL por que sino no compilaba
+	fsmC * fsmCL = NULL;	
 
 	bool fsmServer = false;
-	fsmS * fsmSE = NULL;	//CAMBIE EL NOMBRE A fsmSE por que sino no compilaba
+	fsmS * fsmSE = NULL;	
 
 	Ev_t retEv;
 	fsmData infoForFsm;
