@@ -4,8 +4,7 @@ Server::Server(std::string port) {
 
 	this->IO_handler = new boost::asio::io_service();
 	this->serverSocket = new boost::asio::ip::tcp::socket(*(this->IO_handler));
-	this->serverAcceptor = new boost::asio::ip::tcp::acceptor(*(this->IO_handler), 
-	boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), std::stoi(port)));
+	this->serverAcceptor = new boost::asio::ip::tcp::acceptor(*(this->IO_handler), boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), std::stoi(port)));
 
 }
 
