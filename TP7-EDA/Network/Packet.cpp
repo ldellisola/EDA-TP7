@@ -147,6 +147,12 @@ Ev_t Packet::getPacketEvent()
 		cout << "QUIT Event recieved. Shutting down" << endl;
 		retValue.Event = QUIT_EV;
 	}
+	else if (this->header == ERROR_HD) {
+		cout << "Error Event recieved. Shutting down" << endl;
+		retValue.Event = QUIT_EV;
+	}
+		
+	
 	return retValue;
 }
 
