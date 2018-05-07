@@ -126,6 +126,12 @@
     <ClCompile Include="Parser\Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="eventsFSM.cpp">
+      <Filter>Source Files\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="FSM.cpp">
+      <Filter>Source Files\FSM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Observers\Observer.h">
@@ -193,6 +199,12 @@
     </ClInclude>
     <ClInclude Include="Parser\Parser.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM.h">
+      <Filter>Header Files\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="eventsFSM.h">
+      <Filter>Header Files\FSM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

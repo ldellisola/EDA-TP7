@@ -21,10 +21,10 @@ bool getInfoWithTimeout(string msgSend,string& msg, fsmData * fsminfo, bool serv
 			cout <<countTime.getTime() <<"Time passed" << endl;
 			countTime.start();
 
-			if (server)
+			/*if (server)
 				fsminfo->server->sendMessageTimed(TIMEOUT_TIME, msgSend);
 			else
-				fsminfo->client->sendMessageTimed(msgSend,TIMEOUT_TIME);
+				fsminfo->client->sendMessageTimed(msgSend,TIMEOUT_TIME);*/
 		}
 		else
 			keep = false;
@@ -68,7 +68,7 @@ bool NetworkEvents::initClient() {
 	bool success = false;
 	fsmData * fsminfo;
 
-	fsminfo = (fsmData *)this->fsmCL->getData();
+	fsminfo = (fsmData *)this->fsm->getData();
 	//Espero a que me llegue un IAM del server
 	Packet packet;
 	fsminfo->timeouts = 0;
@@ -81,14 +81,14 @@ bool NetworkEvents::initClient() {
 		cout << packet << endl;
 		if (IAM_HD == packet.getHeader()) {
 			fsminfo->wormXOther = packet.getWormX();
-			fsmCL->setEvent(IAM_FSM);
+			fsm->setEvent(IAM_FSM);
 		}
 		else
-			fsmCL->setEvent(ERROR_FSM);
+			fsm->setEvent(ERROR_FSM);
 	
 	// Me llego perfecto el IAM Entro en la fsm
 	do {
-		this->fsmCL->run();
+		this->fsm->run();
 		// Aca ya le mande mi IAM y estoy esperando a que me llegue un ACK.
 		if (!fsminfo->leave)
 		{
@@ -97,16 +97,16 @@ bool NetworkEvents::initClient() {
 			string msg2;
 
 			if (getInfoWithTimeout(packet.createIAM(), msg2, fsminfo, false))
-				this->fsmCL->setEvent(ERROR_FSM);
+				this->fsm->setEvent(ERROR_FSM);
 			else {
 				packet.setPacket(msg2);
 				cout << packet << endl;
 				if (ACKQ_HD == packet.getHeader()) {
-					fsmCL->setEvent(ACK_FSM);
+					fsm->setEvent(ACK_FSM);
 					success = true;
 				}
 				else
-					fsmCL->setEvent(ERROR_FSM);
+					fsm->setEvent(ERROR_FSM);
 			}
 			// Me llega el ACK hermoso
 		}
@@ -117,7 +117,7 @@ bool NetworkEvents::initClient() {
 
 bool NetworkEvents::initServer() {
 	bool success = false;
-	fsmData * fsminfo = &this->infoForFsm; // ESTO ME TIRA EXCEPTION PERO SI NO LO INICALIZO NO COMPILA
+	fsmData * fsminfo = &this->infoForFsm; 
 
 	// PASOS:
 
@@ -131,21 +131,21 @@ bool NetworkEvents::initServer() {
 	// Espero a que venga un IAM del cliente
 	string msg;
 	if (getInfoWithTimeout(packet.createIAM(), msg, fsminfo,true))
-		this->fsmSE->setEvent(ERROR_FSM);
+		this->fsm->setEvent(ERROR_FSM);
 	else {
 		packet.setPacket(msg);
 		cout << packet << endl;
 		if (IAM_HD == packet.getHeader()) {
 			fsminfo->wormXOther = packet.getWormX();
-			fsmSE->setEvent(ANS_IAM_FSM);
+			fsm->setEvent(ANS_IAM_FSM);
 			success = true;
 		}
 		else
-			fsmSE->setEvent(ERROR_FSM);
+			fsm->setEvent(ERROR_FSM);
 
 		do {
-			cout << "FSM Event:" << fsmSE->actualEvent << endl;
-			this->fsmSE->run();
+			cout << "FSM Event:" << fsm->actualEvent << endl;
+			this->fsm->run();
 			// Dentro de la FSM se manda el ultimo ACK y somos todos felices
 		} while (!fsminfo->leave);
 
@@ -172,78 +172,37 @@ void NetworkEvents::loadClient(Client * client)
 	infoForFsm.client = client;
 }
 
-void NetworkEvents::loadFSMClient(fsmC * client)
+void NetworkEvents::loadFSM(FSM * fsm)
 {
-	this->fsmCL = client;
-	fsmClient = true;
+	this->fsm = fsm;
+	fsmLoaded = true;
 }
 
-void NetworkEvents::loadFSMServer(fsmS * server)
-{
-	this->fsmSE = server;
-	fsmServer = true;
-}
+
 
 void NetworkEvents::update(void * data)
 {
 	Ev_t extEv;
 	Stage * st = NULL;
-	bool great = false;
+	bool activeEvent = false;
 	if (data != NULL) {
 		st = (Stage *)data;
-		if (st->getEvetn() != NULL ) {
+		if (st->getEvetn() != NULL) {
 			extEv = *(Ev_t *)st->getEvetn();
 			if (extEv.active)
-				great = true;
+				activeEvent = true;
 		}
 	}
-	fsmData * fsminfo;
 
-	if (fsmClient && data!= NULL &&great) {
 
-		fsminfo = (fsmData *)this->fsmCL->getData();
+	if (activeEvent) {
+		fsmData * fsminfo = (fsmData *)this->fsm->getData();
 		fsminfo->ev = extEv;
-		this->fsmCL->setEvent(SEND_FSM);
+		this->fsm->setEvent(SEND_FSM);
 		bool getACK = true;
 
 		do {
-			this->fsmCL->run();
-
-			if (getACK)
-			{
-
-				Packet packet;
-				fsminfo->timeouts = 0;
-				string msg;
-
-
-				if (getInfoWithTimeout(fsminfo->oldPacket, msg, fsminfo, false))
-					this->fsmCL->setEvent(ERROR_FSM);
-				else {
-					packet.setPacket(msg);
-					cout << packet << endl;
-					if (! (fsminfo->ev.wormID - packet.getWormID()))
-						this->fsmCL->setEvent(ACK_FSM);
-					else 
-						this->fsmCL->setEvent(ERROR_FSM);
-				}
-				getACK = false;
-			}
-
-			fsminfo->oldPacket.clear();
-
-		} while (!fsminfo->leave);
-
-
-	}
-	else if (fsmServer && data != NULL && great) {
-		fsminfo = (fsmData *)this->fsmSE->getData();
-		fsminfo->ev = extEv;
-		this->fsmSE->setEvent(SEND_FSM);
-		bool getACK = true;
-
-		do {
-			this->fsmSE->run();
+			this->fsm->run();
 
 			if (getACK) {
 
@@ -252,26 +211,22 @@ void NetworkEvents::update(void * data)
 				string msg;
 
 				if (getInfoWithTimeout(fsminfo->oldPacket, msg, fsminfo, true))
-					this->fsmSE->setEvent(ERROR_FSM);
+					this->fsm->setEvent(ERROR_FSM);
 				else {
-					
+
 					packet.setPacket(msg);
 					cout << packet << endl;
 					if (!(fsminfo->ev.wormID - packet.getWormID()))
-						this->fsmSE->setEvent(ACK_FSM);
+						this->fsm->setEvent(ACK_FSM);
 					else
-						this->fsmSE->setEvent(ERROR_FSM);
-					
+						this->fsm->setEvent(ERROR_FSM);
+
 				}
 				getACK = false;
 				fsminfo->oldPacket.clear();
 			}
-
-
 		} while (!fsminfo->leave);
-
 	}
-
 }
 
 void * NetworkEvents::getEvent(void * data)
@@ -279,70 +234,32 @@ void * NetworkEvents::getEvent(void * data)
 
 	int * size = (int*)data;
 	retEv.deactivate();
-	fsmData * fsminfo;
 
-	if (fsmClient) {
+	// El primer evento que tiene que recibir la FSM es de Mandar un ACK, es decir, le llego un evento de MOVE.
+	// Despues de eso sale de la FSM.
 
-		// El primer evento que tiene que recibir la FSM es de Mandar un ACK, es decir, le llego un evento de MOVE.
-		// Despues de eso sale de la FSM.
+	fsmData * fsminfo = (fsmData *)this->fsm->getData();
 
-		fsminfo = (fsmData *)this->fsmCL->getData();
+	Packet packet;
+	fsminfo->timeouts = 0;
+	string msg;
 
-		Packet packet;
-		fsminfo->timeouts = 0;
-		string msg;
-
-
-		if (getInfoOneTry( msg, fsminfo,false))
-			this->fsmCL->setEvent(NOEVENT_FSM);
-		else {
-			packet.setPacket(msg);
-			cout << packet << endl;
-			this->fsmCL->setEvent(MOVE_FSM);
-			
-			this->retEv = packet.getPacketEvent();
-			*size = 1;
-			fsminfo->ev = packet.getPacketEvent();
-			retEv.activate();
-			retEv.wormID = this->wormID;
-		}
-		do {
-
-			this->fsmCL->run();
-		} while (!fsminfo->leave);
-
-
+	if (getInfoOneTry(msg, fsminfo, true))
+		this->fsm->setEvent(NOEVENT_FSM);
+	else {
+		this->fsm->setEvent(MOVE_FSM);
+		packet.setPacket(msg);
+		this->retEv = packet.getPacketEvent();
+		*size = 1;
+		fsminfo->ev = packet.getPacketEvent();
+		retEv.activate();
+		retEv.wormID = this->wormID;
 	}
-	else if (fsmServer) {
 
-		// El primer evento que tiene que recibir la FSM es de Mandar un ACK, es decir, le llego un evento de MOVE.
-		// Despues de eso sale de la FSM.
+	do {
+		this->fsm->run();
+	} while (!fsminfo->leave);
 
-		fsminfo = (fsmData *)this->fsmSE->getData();
-
-		Packet packet;
-		fsminfo->timeouts = 0;
-		string msg;
-	
-
-		if (getInfoOneTry(msg, fsminfo, true))
-			this->fsmSE->setEvent(NOEVENT_FSM);
-		else {
-			this->fsmSE->setEvent(MOVE_FSM);
-			packet.setPacket(msg);
-			this->retEv = packet.getPacketEvent();
-			*size = 1;
-			fsminfo->ev = packet.getPacketEvent();
-			retEv.activate();
-			retEv.wormID = this->wormID;
-		}
-
-		do {
-
-			this->fsmSE->run();
-		} while (!fsminfo->leave);
-
-	}
 	if (!retEv.active) {
 		*size = 0;
 	}

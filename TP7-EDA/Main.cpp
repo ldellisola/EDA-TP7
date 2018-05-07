@@ -41,8 +41,8 @@ int main(int argc ,char * argv[]) {
 	NetworkEvents networkEvents(initialWormX);
 	
 	bool run = false;
-	void * fsmPointer = NULL;
-
+	FSM fsm(notREADY, waitEVENT, waitACK, (void *)networkEvents.getFSMData());
+	networkEvents.loadFSM(&fsm);
 	uint32_t id1;
 	uint32_t id2;
 
@@ -54,8 +54,8 @@ int main(int argc ,char * argv[]) {
 		server->connect();
 		id1 = WORM_S;
 		id2 = WORM_C;
-		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)networkEvents.getFSMData());
-		networkEvents.loadFSMServer((fsmS *)fsmPointer);
+	//	fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)networkEvents.getFSMData());
+	//	networkEvents.loadFSMServer((fsmS *)fsmPointer);
 		run = networkEvents.initServer();		
 	}
 	else {
@@ -64,8 +64,8 @@ int main(int argc ,char * argv[]) {
 		client->link();
 		id1 = WORM_C;
 		id2 = WORM_S;
-		fsmPointer = (void *) new fsmC(notREADY_c, waitEVENT_c, waitACK_c, (void *)networkEvents.getFSMData());
-		networkEvents.loadFSMClient((fsmC *)fsmPointer);
+	//	fsmPointer = (void *) new fsmC(notREADY_c, waitEVENT_c, waitACK_c, (void *)networkEvents.getFSMData());
+	//	networkEvents.loadFSMClient((fsmC *)fsmPointer);
 		run = networkEvents.initClient();
 	}
 
@@ -109,7 +109,7 @@ int main(int argc ,char * argv[]) {
 
 	}
 
-	delete fsmPointer;
+
 	cout << "Program ended. Press 'enter' to continue" << endl;
 	cin.get();
 	return 0;
