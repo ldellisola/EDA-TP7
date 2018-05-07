@@ -1,8 +1,6 @@
 #pragma once
 #include "Client.h"
 #include "Server.h"
-//#include "../FSM Client/fsmClient.h"
-//#include "../FSM Server/fsmServer.h"
 #include "../FSM.h"
 #include"../Observers/Observer.h"
 #include"../Controllers/Controller.h"

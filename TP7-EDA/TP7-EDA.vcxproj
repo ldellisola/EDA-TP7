@@ -153,8 +153,10 @@
     <ClCompile Include="Allegro\AllegroClass.cpp" />
     <ClCompile Include="Allegro\WrittenBox.cpp" />
     <ClCompile Include="Controllers\AllegroEventGetter.cpp" />
+    <ClCompile Include="eventsFSM.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Events\Timer.cpp" />
+    <ClCompile Include="FSM.cpp" />
     <ClCompile Include="Game\Stage.cpp" />
     <ClCompile Include="Game\Worm.cpp" />
     <ClCompile Include="Main.cpp" />
