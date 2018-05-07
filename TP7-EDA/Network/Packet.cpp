@@ -143,6 +143,9 @@ Ev_t Packet::getPacketEvent()
 	retValue.activate();
 	retValue.wormID = wormID;
 	retValue.Event = transformActionToEvent();
+	if (retValue.Event == NOEVENT) {
+		retValue.Event = QUIT_EV;
+	}
 	return retValue;
 }
 
@@ -170,6 +173,7 @@ Evnt Packet::transformActionToEvent()
 		return JUMP_EV;
 	case 't':
 		return TOGGLE_EV;
+	default: return NOEVENT;
 	}
 }
 
