@@ -50,6 +50,7 @@ void * AllegroEventGetter::getEvent(void * data)
 
 			if (alEv.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
 				ev[2].Event = QUIT_EV;
+				ev[2].wormID = this->wormID;
 				ev[2].activate();
 			}
 			else
@@ -90,6 +91,7 @@ void * AllegroEventGetter::getEvent(void * data)
 			break;
 		case ALLEGRO_EVENT_DISPLAY_CLOSE:
 			ev[2].Event = QUIT_EV;
+			ev[2].wormID = this->wormID;
 			ev[2].activate();
 			break;
 			}
