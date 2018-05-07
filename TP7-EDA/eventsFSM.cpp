@@ -93,9 +93,12 @@ void waitEvent_SendEvent(void * data)
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
 
-	packet.setPacket(MOVE_HD, TransformEvent((pointer->ev.Event)), pointer->ev.wormID);
-
-	pointer->oldPacket = packet.createMOVE();
+	if (pointer->ev.Event == QUIT_EV)
+		pointer->oldPacket = packet.createQUIT();
+	else {
+		packet.setPacket(MOVE_HD, TransformEvent((pointer->ev.Event)), pointer->ev.wormID);
+		pointer->oldPacket = packet.createMOVE();
+	}
 	
 	if (pointer->server)
 		pointer->server->sendMessageTimed(TIMEOUT_TIME, pointer->oldPacket);
