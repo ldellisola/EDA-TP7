@@ -48,7 +48,7 @@ std::string Server::getInfo() {
 	return retValue;
 }
 
-bool Server::getInfoSigle(string & msg)
+bool Server::getInfoSingleTry(string & msg)
 {
 	bool returnError= true;
 

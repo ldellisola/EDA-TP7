@@ -117,7 +117,7 @@ string Client::getInfoTimed(int ms)
 	return retValue;
 }
 
-bool Client::getInfoSigle(string & msg)
+bool Client::getInfoSingleTry(string & msg)
 {
 	bool returnError = true;
 

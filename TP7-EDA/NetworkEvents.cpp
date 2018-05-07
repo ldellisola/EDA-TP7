@@ -4,7 +4,6 @@
 bool getInfoWithTimeout(string msgSend,string& msg, fsmData * fsminfo, bool server)
 {
 
-	//server->connect();
 	bool error = false;
 	bool keep = true;
 	Timer countTime;
@@ -31,17 +30,16 @@ bool getInfoWithTimeout(string msgSend,string& msg, fsmData * fsminfo, bool serv
 		if (fsminfo->timeouts == MAXTIMEOUT)
 			error = true;
 	}
-	//server->stop();
 	return error;
 }
 
-bool getInfoOneTry(string&msg, fsmData * fsminfo, bool server) {
+bool getInfoOneTry(string&msg, fsmData * fsminfo) {
 
 	bool error;
 	if (fsminfo->server)
-		error = fsminfo->server->getInfoSigle(msg);
+		error = fsminfo->server->getInfoSingleTry(msg);
 	else if (fsminfo->client)
-		error = fsminfo->client->getInfoSigle(msg);
+		error = fsminfo->client->getInfoSingleTry(msg);
 
 	return error;
 }
@@ -245,7 +243,7 @@ void * NetworkEvents::getEvent(void * data)
 	fsminfo->timeouts = 0;
 	string msg;
 
-	if (getInfoOneTry(msg, fsminfo, true))
+	if (getInfoOneTry(msg, fsminfo))
 		this->fsm->setEvent(NOEVENT_FSM);
 	else {
 		this->fsm->setEvent(MOVE_FSM);
