@@ -5,9 +5,9 @@
 using namespace std;
 
 #define ACKQ_HD (0x00)
-#define ACK_HD (0x01)
-#define IAM_HD (0x02)
-#define MOVE_HD (0x03)
+#define ACK_HD (0x10)
+#define IAM_HD (0x20)
+#define MOVE_HD (0x30)
 #define QUIT_HD (0xFF)
 #define ERROR_HD (0xE0)
 

@@ -48,6 +48,7 @@ public:
 	void flipLeft();
 	// Esta funcion forza al worm a mirar a la derecha
 	void flipRight();
+	void flip();
 	
 	State getState();
 	Direction getDirection();

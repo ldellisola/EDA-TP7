@@ -169,7 +169,7 @@ Evnt Packet::transformActionToEvent()
 	case 'j':
 		return JUMP_EV;
 	case 't':
-		return FLIP_RIGHT_EV;
+		return TOGGLE_EV;
 	}
 }
 
@@ -254,9 +254,4 @@ ostream& operator<<(ostream& o, Packet& c)
 
 	return o;
 }
-#define ACKQ_HD (0x00)
-#define ACK_HD (0x01)
-#define IAM_HD (0x02)
-#define MOVE_HD (0x03)
-#define QUIT_HD (0xFF)
-#define ERROR_HD (0xE0)
+
