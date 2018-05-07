@@ -31,8 +31,8 @@ STATE waitEVENT_s[] = {
 
 STATE waitACK_s[] = {
 { ANS_IAM_FSM, notREADY_s,failedcom_s },
-{ MOVE_FSM,notREADY_s,failedcom_s },
-{ SEND_FSM,notREADY_s,failedcom_s },
+{ MOVE_FSM,notREADY_s,waitEvent_NoEvent_s },
+{ SEND_FSM,notREADY_s,waitEvent_NoEvent_s },
 { ACK_FSM,waitEVENT_s,waitAck_AckRecieved_s },
 { QUIT_FSM,notREADY_s, failedcom_s },
 { ERROR_FSM,notREADY_s,errorfun_s },
@@ -51,7 +51,7 @@ int8_t TransformEvent_s(Evnt ev) {
 		return 'r';
 	case JUMP_EV:
 		return 'j';
-	case FLIP_LEFT_EV: case FLIP_RIGHT_EV:
+	case TOGGLE_EV:
 		return 't';
 	}
 

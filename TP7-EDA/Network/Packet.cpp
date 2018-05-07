@@ -143,7 +143,8 @@ Ev_t Packet::getPacketEvent()
 	retValue.activate();
 	retValue.wormID = wormID;
 	retValue.Event = transformActionToEvent();
-	if (retValue.Event == NOEVENT) {
+	if (retValue.Event == NOEVENT && this->header == QUIT_HD) {
+		cout << "QUIT Event recieved. Shutting down" << endl;
 		retValue.Event = QUIT_EV;
 	}
 	return retValue;
