@@ -10,9 +10,9 @@ bool getInfoWithTimeout(string msgSend,string& msg, fsmData * fsminfo, bool serv
 	Timer countTime;
 
 	while (keep && !error) {
-		if (server)
+		if (fsminfo->server)
 			msg = fsminfo->server->getInfoTimed(TIMEOUT_TIME);
-		else
+		else if (fsminfo->client)
 			msg = fsminfo->client->getInfoTimed(TIMEOUT_TIME);
 		if (!msg.compare(SERVER_TIMEOUT)) {
 			fsminfo->timeouts += 1;
@@ -38,9 +38,9 @@ bool getInfoWithTimeout(string msgSend,string& msg, fsmData * fsminfo, bool serv
 bool getInfoOneTry(string&msg, fsmData * fsminfo, bool server) {
 
 	bool error;
-	if (server)
+	if (fsminfo->server)
 		error = fsminfo->server->getInfoSigle(msg);
-	else
+	else if (fsminfo->client)
 		error = fsminfo->client->getInfoSigle(msg);
 
 	return error;
@@ -104,6 +104,7 @@ bool NetworkEvents::initClient() {
 				if (ACKQ_HD == packet.getHeader()) {
 					fsm->setEvent(ACK_FSM);
 					success = true;
+					fsminfo->leave = true;
 				}
 				else
 					fsm->setEvent(ERROR_FSM);
@@ -259,6 +260,7 @@ void * NetworkEvents::getEvent(void * data)
 	do {
 		this->fsm->run();
 	} while (!fsminfo->leave);
+
 
 	if (!retEv.active) {
 		*size = 0;

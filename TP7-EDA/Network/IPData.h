@@ -37,7 +37,7 @@ typedef struct IPData
 		}
 	}
 	string getOtherIP() {
-		if (ipPosition == 1);
+		if (ipPosition == 1)
 		return ipList[1];
 		if (ipPosition == 2)
 			return ipList[0];

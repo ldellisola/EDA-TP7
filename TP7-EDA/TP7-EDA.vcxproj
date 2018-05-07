@@ -153,14 +153,8 @@
     <ClCompile Include="Allegro\AllegroClass.cpp" />
     <ClCompile Include="Allegro\WrittenBox.cpp" />
     <ClCompile Include="Controllers\AllegroEventGetter.cpp" />
-    <ClCompile Include="eventsFSM.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Events\Timer.cpp" />
-    <ClCompile Include="FSM Client\eventsClient.cpp" />
-    <ClCompile Include="FSM Client\fsmClient.cpp" />
-    <ClCompile Include="FSM Server\eventsServer.cpp" />
-    <ClCompile Include="FSM Server\fsmServer.cpp" />
-    <ClCompile Include="FSM.cpp" />
     <ClCompile Include="Game\Stage.cpp" />
     <ClCompile Include="Game\Worm.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -181,10 +175,6 @@
     <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Events\Ev_t.h" />
     <ClInclude Include="Events\Timer.h" />
-    <ClInclude Include="FSM Client\eventsClient.h" />
-    <ClInclude Include="FSM Client\fsmClient.h" />
-    <ClInclude Include="FSM Server\eventsServer.h" />
-    <ClInclude Include="FSM Server\fsmServer.h" />
     <ClInclude Include="FSM.h" />
     <ClInclude Include="FSMData.h" />
     <ClInclude Include="Game\Stage.h" />
