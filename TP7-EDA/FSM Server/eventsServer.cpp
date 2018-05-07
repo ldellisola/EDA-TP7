@@ -140,9 +140,7 @@ void errorfun_s(void * data)
 	cout << "There was an error. Shutting down" << endl;
 	fsmData * pointer = (fsmData *)data;
 	Packet packet;
-	if (pointer->client)
-		pointer->client->sendMessage(packet.createERROR());
-	else if (pointer->server)
+	 if (pointer->server)
 		pointer->server->sendMessage(packet.createERROR());
 	pointer->leave = true;
 	pointer->error = true;
@@ -153,6 +151,9 @@ void failedcom_s(void * data)
 {
 	cout << "Network events are out of sync. Shutting down" << endl;
 	fsmData * pointer = (fsmData *)data;
+	Packet packet;
+	if (pointer->server)
+		pointer->server->sendMessage(packet.createERROR());
 	pointer->leave = true;
 	pointer->error = true;
 	pointer->exitProgram = true;
@@ -162,6 +163,9 @@ void reset_s(void * data)
 {
 	cout << "Closing" << endl;
 	fsmData * pointer = (fsmData *)data;
+	Packet packet;
+	if (pointer->server)
+		pointer->server->sendMessage(packet.createERROR());
 	pointer->leave = true;
 	pointer->exitProgram = true;
 }

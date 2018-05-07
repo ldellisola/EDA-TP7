@@ -140,26 +140,36 @@ void waitAck_AckRecieved_c(void * data)
 
 void errorfun_c(void * data)
 {
+
 	cout << "There was an error. Shutting down" << endl;
 	fsmData * pointer = (fsmData *)data;
+	Packet packet;
 	pointer->leave = true;
 	pointer->error = true;
 	pointer->exitProgram = true;
+	if (pointer->client)
+		pointer->client->sendMessage(packet.createERROR());
 }
 
 void failedcom_c(void * data)
 {
 	cout << "Network events are out of sync. Shutting down" << endl;
 	fsmData * pointer = (fsmData *)data;
+	Packet packet;
 	pointer->leave = true;
 	pointer->error = true;
 	pointer->exitProgram = true;
+	if (pointer->client)
+		pointer->client->sendMessage(packet.createERROR());
 }
 
 void reset_c(void * data)
 {
 	cout << "Closing" << endl;
+	Packet packet;
 	fsmData * pointer = (fsmData *)data;
 	pointer->leave = true;
 	pointer->exitProgram = true;
+	if (pointer->client)
+		pointer->client->sendMessage(packet.createERROR());
 }
