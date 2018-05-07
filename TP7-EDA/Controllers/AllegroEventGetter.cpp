@@ -84,6 +84,7 @@ void * AllegroEventGetter::getEvent(void * data)
 					ev[0].activate();
 					ev[0].wormID = this->wormID;
 					ev[0].killTimer();
+					ev[0].newTimer();
 				}
 			}
 			break;

@@ -20,7 +20,7 @@ STATE waitEVENT_c[] = {
 { ANS_IAM_FSM , notREADY_c,failedcom_c },
 { SEND_FSM,waitACK_c,waitEvent_SendEvent_c },
 { MOVE_FSM,waitEVENT_c,waitEvent_GetEvent_c},
-{ ACK_FSM,notREADY_c,failedcom_c },
+{ ACK_FSM,waitEVENT_c,waitEvent_NoEvent_c },
 { QUIT_FSM,notREADY_c,waitEvent_QuitRecieved_c },
 { ERROR_FSM,notREADY_c,errorfun_c },
 { IAM_FSM, notREADY_c,failedcom_c },
