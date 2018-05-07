@@ -54,7 +54,7 @@ void EventHandler::displatchEvent(Ev_t & ev, Stage& stage)
 	case RIGHT_EV: stage.wormMoveRight(ev.wormID); break;
 	case JUMP_EV: stage.wormJump(ev.wormID); break;
 	case TOGGLE_EV: stage.wormFlip(ev.wormID); break;
-	case QUIT_EV: stage.quit(); break;
+	case QUIT_EV: stage.refresh();stage.quit(); break;
 	case TIMER_EV: stage.refresh();	break;
 	}
 }
