@@ -215,11 +215,8 @@ void NetworkEvents::update(void * data)
 
 					packet.setPacket(msg);
 					cout << packet << endl;
-					if (!(fsminfo->ev.wormID - packet.getWormID()))
-						this->fsm->setEvent(ACK_FSM);
-					else
-						this->fsm->setEvent(ERROR_FSM);
-
+					fsminfo->ev.wormID = packet.getWormID();
+					this->fsm->setEvent(ACK_FSM);
 				}
 				getACK = false;
 				fsminfo->oldPacket.clear();
