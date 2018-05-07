@@ -42,7 +42,7 @@ STATE waitACK[] = {
 
 
 
-int8_t TransformEvent(Evnt ev) {
+uint8_t TransformEvent(Evnt ev) {
 	switch (ev) {
 	case LEFT_EV:
 		return 'l';

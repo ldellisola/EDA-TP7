@@ -23,7 +23,7 @@ public:
 	~Packet();
 	void clear();
 	// Estas funciones guardan en el objeto la informacion necesaria para crear los string a enviar
-	void setPacket(int8_t type, int8_t action_ = NOTLOADED, uint32_t wormID_ = NOTLOADED, uint16_t wormX_ = NOTLOADED);
+	void setPacket(uint8_t type, uint8_t action_ = NOTLOADED, uint32_t wormID_ = NOTLOADED, uint16_t wormX_ = NOTLOADED);
 	void setPacket(string packet);
 
 	// Verifica si esta limpio el paquete
@@ -39,7 +39,7 @@ public:
 
 	// Son los getters de la informacion del paquete
 	uint32_t getWormID();
-	int8_t getHeader();
+	uint8_t getHeader();
 	Ev_t getPacketEvent();
 	uint16_t getWormX();
 
@@ -59,8 +59,8 @@ private:
 	// Informacion de la clase
 	uint32_t wormID = NOTLOADED;
 	uint16_t wormX = NOTLOADED;
-	int8_t header = NOTLOADED;
-	int8_t action = NOTLOADED;
+	uint8_t header = NOTLOADED;
+	uint8_t action = NOTLOADED;
 	
 
 	
