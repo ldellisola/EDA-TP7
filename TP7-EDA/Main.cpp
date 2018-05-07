@@ -21,7 +21,9 @@ using namespace std;
 /*
 PROBLEMAS:
 
-	Hay que hacer que el worm siga caminando cuando mantenes apretado sin que mande cancer
+	Hay que hacer que el worm siga caminando cuando mantenes apretado
+
+	Tira mucho cancer cuando enviamos el evento de vuelta cada vez que hay timeout
 
 
 */
