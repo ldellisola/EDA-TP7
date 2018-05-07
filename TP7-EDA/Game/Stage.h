@@ -37,11 +37,12 @@ public:
 	uint32_t getMyWormID();
 
 	// Mueven a un worm dado su ID
-	void wormMoveLeft(unsigned int wormID);
-	void wormMoveRight(unsigned int wormID);
-	void wormJump(unsigned int wormID);
-	void wormFlipLeft(unsigned int wormID);
-	void wormFlipRight(unsigned int wormID);
+	void wormMoveLeft( uint32_t wormID);
+	void wormMoveRight(uint32_t wormID);
+	void wormJump(uint32_t wormID);
+	void wormFlipLeft(uint32_t wormID);
+	void wormFlipRight(uint32_t wormID);
+	void wormFlip(uint32_t wormID);
 
 	// actualiza el 
 	void refresh();

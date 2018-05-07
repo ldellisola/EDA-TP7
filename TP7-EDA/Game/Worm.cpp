@@ -51,6 +51,17 @@ void Worm::flipRight() {
 		this->direction = (this->direction == RIGHT_DR ? RIGHT_DR : RIGHT_DR);
 }
 
+void Worm::flip()
+{
+	if (state == STILL_ST)
+	{
+		if (this->direction == RIGHT_DR)
+			this->direction = LEFT_DR;
+		else if (this->direction == LEFT_DR)
+			this->direction = RIGHT_DR;
+	}
+}
+
 State Worm::getState()
 {
 	return state;

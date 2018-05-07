@@ -60,34 +60,40 @@ uint32_t Stage::getMyWormID()
 	return this->myID;
 }
 
-void Stage::wormMoveLeft(unsigned int wormID)
+void Stage::wormMoveLeft(uint32_t wormID)
 {
 	worms[trasnformIDintoPos(wormID)].move(LEFT_DR);
 	lastAction = MOVE_LEFT_AT;
 }
 
-void Stage::wormMoveRight(unsigned int wormID)
+void Stage::wormMoveRight(uint32_t wormID)
 {
 	worms[trasnformIDintoPos(wormID)].move(RIGHT_DR);
 	lastAction = MOVE_RIGHT_AT;
 }
 
-void Stage::wormJump(unsigned int wormID)
+void Stage::wormJump(uint32_t wormID)
 {
 	worms[trasnformIDintoPos(wormID)].jump();
 	lastAction = JUMP_AT;
 }
 
-void Stage::wormFlipLeft(unsigned int wormID)
+void Stage::wormFlipLeft(uint32_t wormID)
 {
 	worms[trasnformIDintoPos(wormID)].flipLeft();
 	lastAction = FLIP_LEFT_AT;
 }
 
-void Stage::wormFlipRight(unsigned int wormID)
+void Stage::wormFlipRight(uint32_t wormID)
 {
 	worms[trasnformIDintoPos(wormID)].flipRight();
 	lastAction = FLIP_RIGHT_AT;
+}
+
+void Stage::wormFlip(uint32_t wormID)
+{
+	worms[trasnformIDintoPos(wormID)].flip();
+
 }
 
 void Stage::refresh()
