@@ -50,6 +50,7 @@ void * AllegroEventGetter::getEvent(void * data)
 
 			if (alEv.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
 				ev[2].Event = QUIT_EV;
+				ev[2].wormID = this->wormID;
 				ev[2].activate();
 			}
 			else
@@ -61,12 +62,12 @@ void * AllegroEventGetter::getEvent(void * data)
 				if (!ev[0].timerGreaterThan(TIMETHRESHOLD))
 				{
 					if (!ev[0].active && ev[0].Event == LEFT_EV) {
-						ev[0].Event = FLIP_LEFT_EV;
+						ev[0].Event = TOGGLE_EV;
 						ev[0].wormID = this->wormID;
 						ev[0].activate();
 					}
 					else if (!ev[0].active && ev[0].Event == RIGHT_EV) {
-						ev[0].Event = FLIP_RIGHT_EV;
+						ev[0].Event = TOGGLE_EV;
 						ev[0].wormID = this->wormID;
 						ev[0].activate();
 					}
@@ -84,12 +85,13 @@ void * AllegroEventGetter::getEvent(void * data)
 					ev[0].activate();
 					ev[0].wormID = this->wormID;
 					ev[0].killTimer();
-					ev[0].newTimer();
+					//ev[0].newTimer();
 				}
 			}
 			break;
 		case ALLEGRO_EVENT_DISPLAY_CLOSE:
 			ev[2].Event = QUIT_EV;
+			ev[2].wormID = this->wormID;
 			ev[2].activate();
 			break;
 			}

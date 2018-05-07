@@ -25,8 +25,6 @@ bool getInfoWithTimeout(string msgSend,string& msg, fsmData * fsminfo, bool serv
 				fsminfo->server->sendMessageTimed(TIMEOUT_TIME, msgSend);
 			else
 				fsminfo->client->sendMessageTimed(msgSend,TIMEOUT_TIME);*/
-
-
 		}
 		else
 			keep = false;
@@ -224,9 +222,10 @@ void NetworkEvents::update(void * data)
 				else {
 					packet.setPacket(msg);
 					cout << packet << endl;
-					this->fsmCL->setEvent(ACK_FSM);
-					fsminfo->ev.wormID = packet.getWormID();
-
+					if (! (fsminfo->ev.wormID - packet.getWormID()))
+						this->fsmCL->setEvent(ACK_FSM);
+					else 
+						this->fsmCL->setEvent(ERROR_FSM);
 				}
 				getACK = false;
 			}
@@ -255,10 +254,14 @@ void NetworkEvents::update(void * data)
 				if (getInfoWithTimeout(fsminfo->oldPacket, msg, fsminfo, true))
 					this->fsmSE->setEvent(ERROR_FSM);
 				else {
-					this->fsmSE->setEvent(ACK_FSM);
+					
 					packet.setPacket(msg);
 					cout << packet << endl;
-					fsminfo->ev.wormID = packet.getWormID();
+					if (!(fsminfo->ev.wormID - packet.getWormID()))
+						this->fsmSE->setEvent(ACK_FSM);
+					else
+						this->fsmSE->setEvent(ERROR_FSM);
+					
 				}
 				getACK = false;
 				fsminfo->oldPacket.clear();

@@ -1,7 +1,5 @@
-#include "CursesClass.h"
 #include "Allegro/AllegroClass.h"
 #include "Events\EventHandler.h"
-#include "UserHandler.h"
 #include "Game/Stage.h"
 #include "Controllers\AllegroEventGetter.h"
 #include "Observers\drawStage.h"
@@ -18,44 +16,23 @@
 #define initialWormX 1000
 
 #define PORT "15667"
+using namespace std;
 
 /*
 PROBLEMAS:
 
-	Si tengo el controller de Network, allegro no funciona. (Pasa cada mucho tiempo por la funcion (creo)
-	/// Cambie la forma en la que obtenemos informacion. Ahora no hay timeout cuando uso la funcion getEvent
-
-
-
-
-	No asigno wormID al evento.
-	// Ya lo implemente para Networking y Allegro.
-
-
-
-	Cuando el server no tiene controller de Network, no tira cancer a la otra computadora.
-	
-
-	Creo que resolvi lo de salir, es medio un quilombo de punteros
-	//Hay que implementar que se cierre le programa cuando hay un error de networking.
-
-
-
+	Hay que hacer que el worm siga caminando cuando mantenes apretado sin que mande cancer
 
 
 */
 
 
 int main(int argc ,char * argv[]) {
-	// Pregunto si soy server o CLient
 
 	Parser parser;
 	parser.Read(argc, argv);
 
-	
-	uint32_t id1;
-	uint32_t id2;
-
+	// Agarro las ips del archivo y asigno los valores que viene por comando.
 	IPData ips;
 	ips.ip = parser.myIP;
 	ips.imServer = parser.initialMachine;
@@ -63,12 +40,14 @@ int main(int argc ,char * argv[]) {
 	
 	NetworkEvents networkEvents(initialWormX);
 	
-
-
-	//fsmData fsmdata = networkEvents.getFSMData();
 	bool run = false;
 	void * fsmPointer = NULL;
-	bool * stopprogram = NULL;
+
+	uint32_t id1;
+	uint32_t id2;
+
+	//Dependiendo si la maquina es server o client, va a inicializar todo acorde
+
 	if (ips.imServer) {
 		Server * server = new Server(PORT);
 		networkEvents.loadServer(server);
@@ -77,9 +56,7 @@ int main(int argc ,char * argv[]) {
 		id2 = WORM_C;
 		fsmPointer = (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s, (void *)networkEvents.getFSMData());
 		networkEvents.loadFSMServer((fsmS *)fsmPointer);
-		run = networkEvents.initServer();
-		//stopprogram = &(((fsmData*)(((fsmS *)fsmPointer)->getData()))->exitProgram);	//creo que este quilombo de casteos me deja la direccion del bool (es tarde y no se me ocurrio otra cosa)
-		
+		run = networkEvents.initServer();		
 	}
 	else {
 		Client * client= new Client(ips.getOtherIP(), PORT);
@@ -90,41 +67,13 @@ int main(int argc ,char * argv[]) {
 		fsmPointer = (void *) new fsmC(notREADY_c, waitEVENT_c, waitACK_c, (void *)networkEvents.getFSMData());
 		networkEvents.loadFSMClient((fsmC *)fsmPointer);
 		run = networkEvents.initClient();
-		//stopprogram = &(((fsmData*)(((fsmC *)fsmPointer)->getData()))->exitProgram);
 	}
 
-	stopprogram = (bool*)&(networkEvents.getFSMData()->exitProgram);	//creo que terminan apuntando a lo mismo y con menos quilombo de punteros mas bonito
+	bool * stopprogram = (bool*)&(networkEvents.getFSMData()->exitProgram);
 
-	
-	AllegroClass allegro(1920, 696, 50);
-	//switch (selectmode(allegro.getEventQueue())) {
-	//case SERVER:
-
-
-	//	id1 = WORM_S;
-	//	id2 = WORM_C;
-	//	fsmPointer= (void *)new fsmS(notREADY_s, waitEVENT_s, waitACK_s,(void *)&fsmdata);
-	//	networkEvents.loadFSMServer((fsmS *)fsmPointer);
-	//	networkEvents.initServer();
-	//	run = true;
-	//	break;
-	//case CLIENT:
-	//	id2 = WORM_S;
-	//	id1 = WORM_C;
-	//	fsmPointer = (void *) new fsmC(notREADY_s, waitEVENT_s, waitACK_s, (void *)&fsmdata);
-	//	networkEvents.loadFSMClient((fsmC *)fsmPointer);
-	//	networkEvents.initClient();
-	//	run = true;
-	//	break;
-	//case LEAVE:
-	//	run = false;
-	//	break;
-	//}
-
-
-	if (run)	//Agrego condicional en caso de se salga de la pantalla de inicio, no se haga nada
+	if (run)	
 	{
-		
+		AllegroClass allegro(1920, 696, 50);
 		EventHandler eventHandler;
 		Stage stage(id1, id2);
 
@@ -161,7 +110,8 @@ int main(int argc ,char * argv[]) {
 	}
 
 	delete fsmPointer;
-	//getchar();
+	cout << "Program ended. Press 'enter' to continue" << endl;
+	cin.get();
 	return 0;
 }
 

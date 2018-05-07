@@ -18,7 +18,7 @@ void Client::link()
 
 	auto q = ip::tcp::resolver::query(ipToConect.c_str(), this->port);
 	this->endpoint = clientResolver->resolve(q);
-	cout << "Waiting for server to connect" << endl;
+	cout << "Connecting to Server" << endl;
 	connect(*clientSocket, endpoint);
 	clientSocket->non_blocking(true);
 	
@@ -95,7 +95,7 @@ string Client::getInfoTimed(int ms)
 	do {
 		lenght = this->clientSocket->read_some(boost::asio::buffer(buffer), error);
 		timer.stop();
-		if (timer.getTime() > ms && lenght == 0) { // Pido que lenght == 0 asi no lo paro mientras esta mandando
+		if (timer.getTime() > ms) { // Pido que lenght == 0 asi no lo paro mientras esta mandando
 			timeout = true;
 		}
 

@@ -153,7 +153,6 @@
     <ClCompile Include="Allegro\AllegroClass.cpp" />
     <ClCompile Include="Allegro\WrittenBox.cpp" />
     <ClCompile Include="Controllers\AllegroEventGetter.cpp" />
-    <ClCompile Include="CursesClass.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Events\Timer.cpp" />
     <ClCompile Include="FSM Client\eventsClient.cpp" />
@@ -170,14 +169,12 @@
     <ClCompile Include="Observers\drawStage.cpp" />
     <ClCompile Include="Observers\Observer.cpp" />
     <ClCompile Include="Parser\Parser.cpp" />
-    <ClCompile Include="UserHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Allegro\AllegroClass.h" />
     <ClInclude Include="Allegro\WrittenBox.h" />
     <ClInclude Include="Controllers\AllegroEventGetter.h" />
     <ClInclude Include="Controllers\Controller.h" />
-    <ClInclude Include="CursesClass.h" />
     <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Events\Ev_t.h" />
     <ClInclude Include="Events\Timer.h" />
@@ -196,7 +193,6 @@
     <ClInclude Include="Observers\drawStage.h" />
     <ClInclude Include="Observers\Observer.h" />
     <ClInclude Include="Parser\Parser.h" />
-    <ClInclude Include="UserHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

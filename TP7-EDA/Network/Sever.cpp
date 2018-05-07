@@ -4,8 +4,7 @@ Server::Server(std::string port) {
 
 	this->IO_handler = new boost::asio::io_service();
 	this->serverSocket = new boost::asio::ip::tcp::socket(*(this->IO_handler));
-	this->serverAcceptor = new boost::asio::ip::tcp::acceptor(*(this->IO_handler), 
-	boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), std::stoi(port)));
+	this->serverAcceptor = new boost::asio::ip::tcp::acceptor(*(this->IO_handler), boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), std::stoi(port)));
 
 }
 
@@ -89,7 +88,7 @@ std::string Server::getInfoTimed(int ms)
 	do {
 		lenght = this->serverSocket->read_some(boost::asio::buffer(buffer), error);
 		timer.stop();
-		if (timer.getTime() > ms && lenght == 0) { // Pido que lenght == 0 asi no lo paro mientras esta mandando
+		if (timer.getTime() > ms) { // Pido que lenght == 0 asi no lo paro mientras esta mandando
 			timeout = true;
 		}
 
@@ -134,4 +133,15 @@ void Server::sendMessageTimed(int ms, string msg)
 	}
 	else
 		std::cout << "ERROR: connection timed out" << msg << std::endl;
+}
+
+void Server::sendMessage(string msg)
+{
+	size_t lenght = 0;
+	boost::system::error_code error;
+
+	do {
+		lenght = this->serverSocket->write_some(boost::asio::buffer(msg), error);
+
+	} while (error);
 }
