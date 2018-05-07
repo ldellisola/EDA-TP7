@@ -95,7 +95,7 @@ string Client::getInfoTimed(int ms)
 	do {
 		lenght = this->clientSocket->read_some(boost::asio::buffer(buffer), error);
 		timer.stop();
-		if (timer.getTime() > ms && lenght == 0) { // Pido que lenght == 0 asi no lo paro mientras esta mandando
+		if (timer.getTime() > ms) { // Pido que lenght == 0 asi no lo paro mientras esta mandando
 			timeout = true;
 		}
 
