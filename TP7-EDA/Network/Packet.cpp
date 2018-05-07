@@ -1,7 +1,7 @@
 #include "Packet.h"
 #include "..\Network\Packet.h"
 
-
+using namespace std;
 
 Packet::Packet()
 {
