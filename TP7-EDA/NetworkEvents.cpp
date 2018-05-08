@@ -82,7 +82,7 @@ bool NetworkEvents::initClient() {
 			fsminfo->wormXOther = packet.getWormX();
 			fsm->setEvent(IAM_FSM);
 		}
-		else
+		else 
 			fsm->setEvent(ERROR_FSM);
 	
 	// Me llego perfecto el IAM Entro en la fsm
@@ -274,7 +274,7 @@ void * NetworkEvents::getEvent(void * data)
 			retEv.activate();
 			retEv.wormID = this->wormID;
 		}
-		else if (packet.getHeader() == ACK_HD)
+		else if (packet.getHeader() == ACK_HD || packet.getHeader() == ACKQ_HD || packet.getHeader() == IAM_HD)
 		{
 			this->fsm->setEvent(ACK_FSM);
 		}
