@@ -105,6 +105,8 @@ bool NetworkEvents::initClient() {
 					success = true;
 					fsminfo->leave = true;
 				}
+				else if (IAM_HD == packet.getHeader())
+					fsm->setEvent(IAM_FSM);
 				else
 					fsm->setEvent(ERROR_FSM);
 			}
