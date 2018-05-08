@@ -42,20 +42,6 @@ STATE waitACK[] = {
 
 
 
-uint8_t TransformEvent(Evnt ev) {
-	switch (ev) {
-	case LEFT_EV:
-		return 'l';
-	case RIGHT_EV:
-		return 'r';
-	case JUMP_EV:
-		return 'j';
-	case TOGGLE_EV:
-		return 't';
-	}
-
-}
-
 void waitEvent_NoEvent(void*data) {
 	//cout << "No Event was Recieved" << endl;
 }
@@ -96,7 +82,7 @@ void waitEvent_SendEvent(void * data)
 	if (pointer->ev.Event == QUIT_EV)
 		pointer->oldPacket = packet.createQUIT();
 	else {
-		packet.setPacket(MOVE_HD, TransformEvent((pointer->ev.Event)), pointer->ev.wormID);
+		packet.setPacket(pointer->ev);
 		pointer->oldPacket = packet.createMOVE();
 	}
 	

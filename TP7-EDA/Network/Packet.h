@@ -14,7 +14,7 @@ using namespace std;
 
 #define IDSIZE (4)
 #define NOTLOADED (-1)	// Ya se quu va a ir a una variable positiva, pero esto me va a dar un valor muy alto que me sirve como base
-
+uint8_t TransformEvent(Evnt ev);
 
 class Packet
 {
@@ -25,6 +25,7 @@ public:
 	// Estas funciones guardan en el objeto la informacion necesaria para crear los string a enviar
 	void setPacket(uint8_t type, uint8_t action_ = NOTLOADED, uint32_t wormID_ = NOTLOADED, uint16_t wormX_ = NOTLOADED);
 	void setPacket(string packet);
+	void setPacket(Ev_t event_);
 
 	// Verifica si esta limpio el paquete
 	bool isPacketClear();

@@ -49,7 +49,8 @@ bool getInfoOneTry(string&msg, fsmData * fsminfo) {
 NetworkEvents::NetworkEvents(uint16_t wormX)
 {
 	Ev_t extEv;
-	infoForFsm = { extEv,0,false,false,wormX,0 ,NULL,NULL };
+	extEv.deactivate();
+	infoForFsm = { extEv,extEv,0,false,false,wormX,0 ,NULL,NULL };
 
 }
 
@@ -220,6 +221,7 @@ void NetworkEvents::update(void * data)
 						this->fsm->setEvent(ACK_FSM);
 					else {
 						fsminfo->backup = packet.getPacketEvent();
+						fsminfo->backup.activate();
 						this->fsm->setEvent(MOVE_FSM);
 					}
 				}
@@ -245,8 +247,13 @@ void * NetworkEvents::getEvent(void * data)
 	fsminfo->timeouts = 0;
 	string msg;
 
-	if (getInfoOneTry(msg, fsminfo))
-		this->fsm->setEvent(NOEVENT_FSM);
+	if (getInfoOneTry(msg, fsminfo)) {
+		if (fsminfo->backup.active) {
+			this->fsm->setEvent(MOVE_FSM);
+			this->retEv = fsminfo->backup;
+		}else
+			this->fsm->setEvent(NOEVENT_FSM);
+	}
 	else {
 		this->fsm->setEvent(MOVE_FSM);
 		packet.setPacket(msg);

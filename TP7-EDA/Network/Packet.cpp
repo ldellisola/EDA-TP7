@@ -3,6 +3,22 @@
 
 using namespace std;
 
+
+
+uint8_t TransformEvent(Evnt ev) {
+	switch (ev) {
+	case LEFT_EV:
+		return 'l';
+	case RIGHT_EV:
+		return 'r';
+	case JUMP_EV:
+		return 'j';
+	case TOGGLE_EV:
+		return 't';
+	}
+
+}
+
 Packet::Packet()
 {
 }
@@ -68,6 +84,13 @@ void Packet::setPacket(string packet)
 		getBEStringToNum(packet, &wormID);
 		break;
 	}	// No hago de los demas headers por que no tienen mas info.
+}
+
+void Packet::setPacket(Ev_t event_)
+{
+	header = MOVE_HD;
+	wormID = event_.wormID;
+	action = TransformEvent(event_.Event);
 }
 
 bool Packet::isPacketClear()
