@@ -221,6 +221,7 @@ void NetworkEvents::update(void * data)
 					fsminfo->ev.wormID = packet.getWormID();
 					if (packet.getHeader() == ACK_HD) {
 						this->fsm->setEvent(ACK_FSM);
+						fsminfo->leave = false;
 						getACK = false;
 						fsminfo->oldPacket.clear();
 					}
