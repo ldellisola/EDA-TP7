@@ -260,13 +260,22 @@ void * NetworkEvents::getEvent(void * data)
 			this->fsm->setEvent(NOEVENT_FSM);
 	}
 	else {
-		this->fsm->setEvent(MOVE_FSM);
+		
 		packet.setPacket(msg);
-		this->retEv = packet.getPacketEvent();
-		*size = 1;
-		fsminfo->ev = packet.getPacketEvent();
-		retEv.activate();
-		retEv.wormID = this->wormID;
+		if (packet.getHeader() == MOVE_HD) {
+			this->fsm->setEvent(MOVE_FSM);
+			this->retEv = packet.getPacketEvent();
+			*size = 1;
+			fsminfo->ev = packet.getPacketEvent();
+			retEv.activate();
+			retEv.wormID = this->wormID;
+		}
+		else if (packet.getHeader() == ACK_HD)
+		{
+			this->fsm->setEvent(ACK_FSM);
+		}
+		else
+			this->fsm->setEvent(ERROR_FSM);
 	}
 
 	do {
