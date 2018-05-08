@@ -222,6 +222,7 @@ void NetworkEvents::update(void * data)
 					if (packet.getHeader() == ACK_HD) {
 						this->fsm->setEvent(ACK_FSM);
 						getACK = false;
+						fsminfo->oldPacket.clear();
 					}
 					else {
 						fsminfo->backup = packet.getPacketEvent();
@@ -230,7 +231,7 @@ void NetworkEvents::update(void * data)
 					}
 				}
 				
-				fsminfo->oldPacket.clear();
+				
 			}
 		} while (!fsminfo->leave);
 	}

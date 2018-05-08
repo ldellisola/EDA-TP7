@@ -30,7 +30,7 @@ STATE waitEVENT[] = {
 
 STATE waitACK[] = {
 { ANS_IAM_FSM, notREADY,failedcom },
-{ MOVE_FSM,waitACK,waitEvent_NoEvent },
+{ MOVE_FSM,waitACK,waitEvent_GetEvent },
 { SEND_FSM,notREADY,waitEvent_NoEvent },
 { ACK_FSM,waitEVENT,waitAck_AckRecieved },
 { QUIT_FSM,notREADY, failedcom },
