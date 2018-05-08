@@ -210,22 +210,26 @@ void NetworkEvents::update(void * data)
 				fsminfo->timeouts = 0;
 				string msg;
 
-				if (getInfoWithTimeout(fsminfo->oldPacket, msg, fsminfo, true))
+				if (getInfoWithTimeout(fsminfo->oldPacket, msg, fsminfo, true)) {
 					this->fsm->setEvent(ERROR_FSM);
+					getACK = false;
+				}
 				else {
 
 					packet.setPacket(msg);
 					cout << packet << endl;
 					fsminfo->ev.wormID = packet.getWormID();
-					if (packet.getHeader() == ACK_HD)
+					if (packet.getHeader() == ACK_HD) {
 						this->fsm->setEvent(ACK_FSM);
+						getACK = false;
+					}
 					else {
 						fsminfo->backup = packet.getPacketEvent();
 						fsminfo->backup.activate();
 						this->fsm->setEvent(MOVE_FSM);
 					}
 				}
-				getACK = false;
+				
 				fsminfo->oldPacket.clear();
 			}
 		} while (!fsminfo->leave);
