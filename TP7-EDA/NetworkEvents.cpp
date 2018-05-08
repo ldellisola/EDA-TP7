@@ -256,6 +256,7 @@ void * NetworkEvents::getEvent(void * data)
 		if (fsminfo->backup.active) {
 			this->fsm->setEvent(MOVE_FSM);
 			this->retEv = fsminfo->backup;
+			fsminfo->backup.deactivate();
 		}else
 			this->fsm->setEvent(NOEVENT_FSM);
 	}
