@@ -5,10 +5,10 @@
 
 
 STATE notREADY[] = {
-	{ ANS_IAM_FSM , waitEVENT,notReady_AnswerIAM },
+{ ANS_IAM_FSM , waitEVENT,notReady_AnswerIAM },
 { SEND_FSM,notREADY,failedcom },
 { MOVE_FSM,notREADY,failedcom },
-{ ACK_FSM,notREADY,failedcom },
+{ ACK_FSM,notREADY,waitEvent_NoEvent },
 { QUIT_FSM,notREADY,failedcom },
 { ERROR_FSM,notREADY,errorfun },
 { IAM_FSM,waitEVENT,notReady_ReadyRecieved },
@@ -17,14 +17,14 @@ STATE notREADY[] = {
 };
 
 STATE waitEVENT[] = {
-{ ANS_IAM_FSM , notREADY,failedcom },
+{ ANS_IAM_FSM , waitEVENT,waitEvent_NoEvent },
 { SEND_FSM,waitACK,waitEvent_SendEvent },
 { MOVE_FSM,waitEVENT,waitEvent_GetEvent },
 { ACK_FSM,waitEVENT,waitEvent_NoEvent },
 { QUIT_FSM,notREADY,waitEvent_QuitRecieved },
 { ERROR_FSM,notREADY,errorfun },
 { NOEVENT_FSM,waitEVENT,waitEvent_NoEvent },
-{ IAM_FSM, notREADY,failedcom },
+{ IAM_FSM, waitEVENT,waitEvent_NoEvent },
 { END,notREADY,reset },
 };
 
