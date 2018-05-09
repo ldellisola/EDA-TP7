@@ -227,8 +227,9 @@ void NetworkEvents::update(void * data)
 						getACK = false;
 						fsminfo->oldPacket.clear();
 					}
-					else if (packet.getHeader() == QUIT_HD) {
+					else if (packet.getHeader() == ACKQ_HD) {
 						fsminfo->leave = false;
+						this->fsm->setEvent(ACK_FSM);
 						getACK = false;
 						fsminfo->oldPacket.clear();
 					}else if (packet.getHeader() == MOVE_HD) {
