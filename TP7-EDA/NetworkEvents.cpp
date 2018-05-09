@@ -20,9 +20,9 @@ bool getInfoWithTimeout(string msgSend,string& msg, fsmData * fsminfo, bool serv
 			cout <<countTime.getTime() <<"Time passed" << endl;
 			countTime.start();
 
-			if (server)
+			if (fsminfo->server)
 				fsminfo->server->sendMessageTimed(TIMEOUT_TIME, msgSend);
-			else
+			else if (fsminfo->client)
 				fsminfo->client->sendMessageTimed(msgSend,TIMEOUT_TIME);
 		}
 		else
