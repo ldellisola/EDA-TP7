@@ -227,7 +227,11 @@ void NetworkEvents::update(void * data)
 						getACK = false;
 						fsminfo->oldPacket.clear();
 					}
-					else {
+					else if (packet.getHeader() == QUIT_HD) {
+						fsminfo->leave = false;
+						getACK = false;
+						fsminfo->oldPacket.clear();
+					}else if (packet.getHeader() == MOVE_HD) {
 						fsminfo->backup = packet.getPacketEvent();
 						fsminfo->backup.activate();
 						this->fsm->setEvent(MOVE_FSM);
