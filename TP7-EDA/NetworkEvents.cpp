@@ -278,6 +278,8 @@ void * NetworkEvents::getEvent(void * data)
 		{
 			this->fsm->setEvent(ACK_FSM);
 		}
+		else if (packet.getHeader() == QUIT_HD)
+			this->fsm->setEvent(QUIT_FSM);
 		else
 			this->fsm->setEvent(ERROR_FSM);
 	}
