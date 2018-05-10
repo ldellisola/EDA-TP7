@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <string>
 #include "../Events/Ev_t.h"
+#include <iostream> // Debug
 using namespace std;
 
 #define ACKQ_HD (0x00)
@@ -13,7 +14,7 @@ using namespace std;
 
 #define IDSIZE (4)
 #define NOTLOADED (-1)	// Ya se quu va a ir a una variable positiva, pero esto me va a dar un valor muy alto que me sirve como base
-
+uint8_t TransformEvent(Evnt ev);
 
 class Packet
 {
@@ -22,8 +23,9 @@ public:
 	~Packet();
 	void clear();
 	// Estas funciones guardan en el objeto la informacion necesaria para crear los string a enviar
-	void setPacket(int8_t type, int8_t action_ = NOTLOADED, uint32_t wormID_ = NOTLOADED, uint16_t wormX_ = NOTLOADED);
+	void setPacket(uint8_t type, uint8_t action_ = NOTLOADED, uint32_t wormID_ = NOTLOADED, uint16_t wormX_ = NOTLOADED);
 	void setPacket(string packet);
+	void setPacket(Ev_t event_);
 
 	// Verifica si esta limpio el paquete
 	bool isPacketClear();
@@ -38,7 +40,7 @@ public:
 
 	// Son los getters de la informacion del paquete
 	uint32_t getWormID();
-	int8_t getHeader();
+	uint8_t getHeader();
 	Ev_t getPacketEvent();
 	uint16_t getWormX();
 
@@ -58,8 +60,8 @@ private:
 	// Informacion de la clase
 	uint32_t wormID = NOTLOADED;
 	uint16_t wormX = NOTLOADED;
-	int8_t header = NOTLOADED;
-	int8_t action = NOTLOADED;
+	uint8_t header = NOTLOADED;
+	uint8_t action = NOTLOADED;
 	
 
 	

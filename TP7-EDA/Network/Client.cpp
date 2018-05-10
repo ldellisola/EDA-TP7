@@ -32,9 +32,8 @@ void Client::sendMessage(string msg)
 	size_t lenght = 0;
 	boost::system::error_code error;
 
-	do {
-		lenght = this->clientSocket->write_some(boost::asio::buffer(msg, msg.size()), error);
-	} while (error);
+
+	lenght = this->clientSocket->write_some(boost::asio::buffer(msg, msg.size()), error);
 
 	std::cout << "Message sent" << std::endl;
 
@@ -118,7 +117,7 @@ string Client::getInfoTimed(int ms)
 	return retValue;
 }
 
-bool Client::getInfoSigle(string & msg)
+bool Client::getInfoSingleTry(string & msg)
 {
 	bool returnError = true;
 

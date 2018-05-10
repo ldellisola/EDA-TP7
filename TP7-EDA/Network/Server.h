@@ -15,7 +15,7 @@ public:
 	~Server();
 	void connect();
 	string getInfo();
-	bool getInfoSigle(string& msg);
+	bool getInfoSingleTry(string& msg);
 	string getInfoTimed(int ms);
 	void sendMessageTimed(int ms, string msg);
 	void sendMessage(string msg);

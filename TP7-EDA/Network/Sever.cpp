@@ -48,7 +48,7 @@ std::string Server::getInfo() {
 	return retValue;
 }
 
-bool Server::getInfoSigle(string & msg)
+bool Server::getInfoSingleTry(string & msg)
 {
 	bool returnError= true;
 
@@ -140,8 +140,8 @@ void Server::sendMessage(string msg)
 	size_t lenght = 0;
 	boost::system::error_code error;
 
-	do {
+	//do {
 		lenght = this->serverSocket->write_some(boost::asio::buffer(msg), error);
 
-	} while (error);
+	//} while (error);
 }

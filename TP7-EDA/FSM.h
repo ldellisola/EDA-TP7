@@ -1,24 +1,27 @@
 #pragma once
-#include "eventsClient.h"
-
+#include "FSMData.h"
+#include "eventsFSM.h"
 #include <ctype.h>
 
 
 
-class fsmC
+class FSM
 {
 public:
-	fsmC(STATE * state1_, STATE * state2_, STATE * state3_, void * data_);
-	~fsmC();
+	FSM(STATE * state1_, STATE * state2_, STATE * state3_, void* data_);
+	~FSM();
 	void run();
 	int setEvent(int ev_);
-	void *getData();
-private:
+	void * getData();
 	int actualEvent;
+
+private:
 	STATE * actualState;
+
 	STATE * state1;
 	STATE * state2;
 	STATE * state3;
 
 	void * data;
 };
+

@@ -1,7 +1,6 @@
-#include "fsmClient.h"
+#include "FSM.h"
 
-
-fsmC::fsmC(STATE * state1_, STATE * state2_, STATE * state3_,void * data_)
+FSM::FSM(STATE * state1_, STATE * state2_, STATE * state3_, void * data_)
 {
 	this->state1 = state1_;			// Cargo los estados con sus posibles eventos en la clase
 	this->state2 = state2_;
@@ -11,11 +10,7 @@ fsmC::fsmC(STATE * state1_, STATE * state2_, STATE * state3_,void * data_)
 	this->actualState = this->state1;  //Elijo al estado 1 como el estado inicial
 }
 
-fsmC::~fsmC()
-{
-}
-
-void fsmC::run()
+void FSM::run()
 {
 	int i;
 	// Busco en el arreglo de los posibles eventos del estado actual cual corresponde al evento que me mandan
@@ -23,9 +18,8 @@ void fsmC::run()
 
 	this->actualState[i].func(this->data);							// Ejecuto la funcion del evento
 	this->actualState = actualState[i].nextState;					// Cambio el estado
-
 }
-int fsmC::setEvent(int ev_)
+int FSM::setEvent(int ev_)
 {
 	this->actualEvent = ev_;
 
@@ -35,8 +29,11 @@ int fsmC::setEvent(int ev_)
 	return this->actualEvent;
 }
 
-void *fsmC::getData()
+void * FSM::getData()
 {
 	return data;
 }
 
+FSM::~FSM()
+{
+}

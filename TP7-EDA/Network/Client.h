@@ -23,7 +23,7 @@ public:
 	std::string getInfo();
 	string getInfoTimed(int ms);
 
-	bool getInfoSigle(string & msg);
+	bool getInfoSingleTry(string & msg);
 
 	~Client();
 private:

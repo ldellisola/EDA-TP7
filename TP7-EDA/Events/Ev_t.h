@@ -9,6 +9,8 @@ typedef enum Evnt {
 	NOEVENT, LEFT_EV,TOGGLE_EV, RIGHT_EV, JUMP_EV, TIMER_EV, QUIT_EV, FLIP_LEFT_EV, FLIP_RIGHT_EV
 };
 
+
+
 //Esta estructura es el evento que obtenes. Tiene lugar para almacenar el evento actual y el evento anterior, un puntero a timer y tambien te dice si esta
 // activo o no el evento. Tiene funciones para manejar tanto los eventos como el timer
 
@@ -54,3 +56,5 @@ typedef struct {
 		return retValue;
 	}
 }Ev_t;
+
+

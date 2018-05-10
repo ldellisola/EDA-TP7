@@ -1,7 +1,23 @@
 #include "Packet.h"
 #include "..\Network\Packet.h"
 
+using namespace std;
 
+
+
+uint8_t TransformEvent(Evnt ev) {
+	switch (ev) {
+	case LEFT_EV:
+		return 'l';
+	case RIGHT_EV:
+		return 'r';
+	case JUMP_EV:
+		return 'j';
+	case TOGGLE_EV:
+		return 't';
+	}
+
+}
 
 Packet::Packet()
 {
@@ -21,7 +37,7 @@ void Packet::clear()
 
 }
 
-void Packet::setPacket(int8_t type, int8_t action_ , uint32_t wormID_ , uint16_t wormX_ ){
+void Packet::setPacket(uint8_t type, uint8_t action_ , uint32_t wormID_ , uint16_t wormX_ ){
 	clear();
 
 	switch (type) {
@@ -68,6 +84,13 @@ void Packet::setPacket(string packet)
 		getBEStringToNum(packet, &wormID);
 		break;
 	}	// No hago de los demas headers por que no tienen mas info.
+}
+
+void Packet::setPacket(Ev_t event_)
+{
+	header = MOVE_HD;
+	wormID = event_.wormID;
+	action = TransformEvent(event_.Event);
 }
 
 bool Packet::isPacketClear()
@@ -132,7 +155,7 @@ uint32_t Packet::getWormID()
 	return wormID;
 }
 
-int8_t Packet::getHeader()
+uint8_t Packet::getHeader()
 {
 	return header;
 }
@@ -143,6 +166,19 @@ Ev_t Packet::getPacketEvent()
 	retValue.activate();
 	retValue.wormID = wormID;
 	retValue.Event = transformActionToEvent();
+	if (retValue.Event == NOEVENT ) {
+		if (this->header == QUIT_HD) {
+			cout << "QUIT Event recieved. Shutting down" << endl;
+			retValue.Event = QUIT_EV;
+		}
+		else if (this->header == ERROR_HD) {
+			cout << "Error Event recieved. Shutting down" << endl;
+			retValue.Event = QUIT_EV;
+		}
+
+	}
+		
+	
 	return retValue;
 }
 
@@ -153,7 +189,7 @@ uint16_t Packet::getWormX()
 
 void Packet::getBEStringToNum(string a,  uint32_t * number)
 {
-	int8_t * pointer = (int8_t *)number;
+	uint8_t * pointer = (uint8_t *)number;
 
 	for (int i = 0; i < 4; i++)
 		pointer[i] = a[4 - i - 1];
@@ -170,12 +206,13 @@ Evnt Packet::transformActionToEvent()
 		return JUMP_EV;
 	case 't':
 		return TOGGLE_EV;
+	default: return NOEVENT;
 	}
 }
 
 string Packet::getNumToBEString(uint32_t * number)
 {
-	int8_t * pointer = (int8_t *)number;
+	uint8_t * pointer = (uint8_t *)number;
 
 	string ret;
 	for (int i = 4 - 1; i >= 0; i--)
@@ -186,7 +223,7 @@ string Packet::getNumToBEString(uint32_t * number)
 
 void Packet::getBEStringToNum(string a, uint16_t * number)
 {
-	int8_t * pointer = (int8_t *)number;
+	uint8_t * pointer = (uint8_t *)number;
 
 	for (int i = 0; i <= 1; i++)
 		pointer[i] = a[2 - i - 1];
