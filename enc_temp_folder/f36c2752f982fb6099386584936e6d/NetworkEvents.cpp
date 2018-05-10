@@ -94,7 +94,7 @@ bool NetworkEvents::initClient() {
 			Packet packet;
 			fsminfo->timeouts = 0;
 			string msg2;
-			packet.setPacket(IAM_HD, NOTLOADED, fsminfo->wormXMine);
+
 			if (getInfoWithTimeout(packet.createIAM(), msg2, fsminfo, false))
 				this->fsm->setEvent(ERROR_FSM);
 			else {
