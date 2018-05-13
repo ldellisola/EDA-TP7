@@ -6,7 +6,7 @@
 enum event_types { MOVE_FSM, ACK_FSM, QUIT_FSM, IAM_FSM,ANS_IAM_FSM, SEND_FSM, ERROR_FSM , NOEVENT_FSM};
 
 #define MAXTIMEOUT 5
-#define TIMEOUT_TIME (200) // en ms
+#define TIMEOUT_TIME (20) // en ms
 #define END 99
 
 typedef struct state_t STATE;
